@@ -52,7 +52,7 @@ impl Snake {
             y,
         });
 
-        Snake {
+        return Snake {
             direction: Direction::Right,
             body,
             tail: None,
@@ -64,5 +64,11 @@ impl Snake {
         for block in self.body {
             draw_block(SNAKE_COLOR, block.x, block.y, con, game);
         }
+    }
+
+    pub fn head_position(&self) -> (i32, i32) {
+        let head_block = self.body.front().unwrap();
+
+        return (head_block.x, head_block.y);
     }
 }
