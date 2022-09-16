@@ -115,4 +115,20 @@ impl Game {
 
         return next_x > 0 && next_y > 0 && next_x < self.width - 1 && next_y < self.height - 1;
     }
+
+    fn add_food(&mut self) {
+        let mut rng = thread_rng();
+
+        let mut new_x = rng.gen_range(1, self.width - 1);
+        let mut new_y = rng.gen_range(1, self.height - 1);
+
+        while self.snake.overlap_tail(new_x, new_y) {
+            new_x = rng.gen_range(1, self.width - 1);
+            new_y = rng.gen_range(1, self.height - 1);
+        }
+
+        self.food_x = new_x;
+        self.food_y = new_y;
+        self.food_exists = true;
+    }
 }
