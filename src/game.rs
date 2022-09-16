@@ -61,4 +61,21 @@ impl Game {
 
         self.update_snake(dir);
     }
+
+    pub fn draw(&self, con: &Context, game: &mut G2d) {
+        self.snake.draw(con, game);
+
+        if self.food_exists {
+            draw_block(FOOD_COLOR, self.food_x, self.food_y, con, game);
+        }
+
+        draw_rectangle(BORDER_COLOR, 0, 0, self.width, 1, con, game);
+        draw_rectangle(BORDER_COLOR, 0, self.height - 1, self.width, 1, con, game);
+        draw_rectangle(BORDER_COLOR, 0, 0, 1, self.height, con, game);
+        draw_rectangle(BORDER_COLOR, self.width - 1, 0, 1, self.height, con, game);
+
+        if self.game_over {
+            draw_rectangle(GAMEOVER_COLOR, 0, 0, self.width, self.height, con, game);
+        }
+    }
 }
