@@ -105,4 +105,14 @@ impl Game {
             self.snake.restore_tail();
         }
     }
+
+    pub fn check_if_snake_alive(&self, dir: Option<Direction>) -> bool {
+        let (next_x, next_y) = self.snake.next_head(dir);
+
+        if self.snake.overlap_tail(next_x, next_y) {
+            return false;
+        }
+
+        return next_x > 0 && next_y > 0 && next_x < self.width - 1 && next_y < self.height - 1;
+    }
 }
