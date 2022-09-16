@@ -34,3 +34,28 @@ pub struct Snake {
     body: LinkedList<Block>,
     tail: Option<Block>,
 }
+
+impl Snake {
+    pub fn new(x: i32, y: i32) -> Snake {
+        let mut body: LinkedList<Block> = LinkedList::new();
+
+        body.push_back(Block {
+            x: x+2,
+            y,
+        });
+        body.push_back(Block {
+            x: x+1,
+            y,
+        });
+        body.push_back(Block {
+            x: x,
+            y,
+        });
+
+        Snake {
+            direction: Direction::Right,
+            body,
+            tail: None;
+        }
+    }
+}
