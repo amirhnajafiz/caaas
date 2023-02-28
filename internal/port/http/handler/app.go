@@ -1,6 +1,8 @@
 package handler
 
 import (
+	"github.com/amirhnajafiz/authX/internal/port/http/response"
+	"strconv"
 	"time"
 
 	"github.com/amirhnajafiz/authX/internal/model"
@@ -37,7 +39,24 @@ func (h *Handler) CreateApp(ctx *fiber.Ctx) error {
 
 // GetSingleApp of a user.
 func (h *Handler) GetSingleApp(ctx *fiber.Ctx) error {
-	return nil
+	id, _ := strconv.Atoi(ctx.Params("app_id"))
+	appID := uint(id)
+
+	app, err := h.Repository.Apps.GetSingle(appID)
+	if err != nil {
+		return fiber.ErrNotFound
+	}
+
+	clients, err := h.Repository.Clients.GetAppClients(app.ID)
+	if err != nil {
+		return fiber.ErrInternalServerError
+	}
+
+	return ctx.JSON(response.AppResponse{
+		ID:      appID,
+		Name:    app.Name,
+		Clients: clients,
+	})
 }
 
 // RemoveApp of a user.
