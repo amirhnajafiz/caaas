@@ -6,6 +6,8 @@ import (
 
 	"github.com/amirhnajafiz/authX/internal/port/http/handler"
 	"github.com/amirhnajafiz/authX/internal/port/http/middleware"
+	"github.com/amirhnajafiz/authX/internal/repository"
+	"github.com/amirhnajafiz/authX/internal/storage"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -17,8 +19,23 @@ type HTTP struct{}
 func (h HTTP) main(port int) {
 	app := fiber.New()
 
-	handlerInstance := handler.Handler{}
-	middlewareInstance := middleware.Middleware{}
+	// open db connection
+	db, err := storage.NewConnection(storage.Config{})
+	if err != nil {
+		log.Println(err)
+
+		return
+	}
+
+	// create repository
+	r := repository.New(db)
+
+	handlerInstance := handler.Handler{
+		Repository: r,
+	}
+	middlewareInstance := middleware.Middleware{
+		Repository: r,
+	}
 
 	app.Get("/login", handlerInstance.LoginView)
 	app.Get("/signup", handlerInstance.SignupView)
