@@ -20,16 +20,19 @@ func (h HTTP) main(port int) {
 	handlerInstance := handler.Handler{}
 	middlewareInstance := middleware.Middleware{}
 
+	app.Get("/login", handlerInstance.LoginView)
+	app.Get("/signup", handlerInstance.SignupView)
+
 	app.Post("/api/login", handlerInstance.Login)
 	app.Put("/api/signup", handlerInstance.Signup)
 
 	v1 := app.Use(middlewareInstance.Authenticate)
 
-	v1.Put("/api/app", handlerInstance.CreateApp)
+	v1.Get("/home", handlerInstance.HomeView)
 
+	v1.Put("/api/app", handlerInstance.CreateApp)
 	v1.Get("/api/app/:app_id", handlerInstance.GetAppClient)
 	v1.Delete("/api/app/:app_id", handlerInstance.RemoveApp)
-
 	v1.Put("/api/app/:app_id/client", handlerInstance.AddClient)
 	v1.Get("/api/app/:app_id/client/:client_id", handlerInstance.GetAppClient)
 
