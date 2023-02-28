@@ -2,6 +2,8 @@ package clients
 
 import (
 	"github.com/amirhnajafiz/authX/internal/model"
+
+	"gorm.io/gorm"
 )
 
 type Clients interface {
@@ -10,11 +12,15 @@ type Clients interface {
 	GetSingle(id uint) (*model.Client, error)
 }
 
-func New() Clients {
-	return &clients{}
+func New(db *gorm.DB) Clients {
+	return &clients{
+		db: db,
+	}
 }
 
-type clients struct{}
+type clients struct {
+	db *gorm.DB
+}
 
 func (a *clients) Create(client *model.Client) error {
 	return nil

@@ -2,6 +2,8 @@ package apps
 
 import (
 	"github.com/amirhnajafiz/authX/internal/model"
+
+	"gorm.io/gorm"
 )
 
 type Apps interface {
@@ -10,11 +12,15 @@ type Apps interface {
 	Delete(id uint) error
 }
 
-func New() Apps {
-	return &apps{}
+func New(db *gorm.DB) Apps {
+	return &apps{
+		db: db,
+	}
 }
 
-type apps struct{}
+type apps struct {
+	db *gorm.DB
+}
 
 func (a *apps) Create(app *model.App) error {
 	return nil

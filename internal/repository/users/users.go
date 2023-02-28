@@ -2,6 +2,8 @@ package users
 
 import (
 	"github.com/amirhnajafiz/authX/internal/model"
+
+	"gorm.io/gorm"
 )
 
 type Users interface {
@@ -10,11 +12,15 @@ type Users interface {
 	GetByEmail(email string) (*model.User, error)
 }
 
-func New() Users {
-	return &users{}
+func New(db *gorm.DB) Users {
+	return &users{
+		db: db,
+	}
 }
 
-type users struct{}
+type users struct {
+	db *gorm.DB
+}
 
 func (u *users) Insert(user *model.User) error {
 	return nil

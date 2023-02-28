@@ -4,6 +4,8 @@ import (
 	"github.com/amirhnajafiz/authX/internal/repository/apps"
 	"github.com/amirhnajafiz/authX/internal/repository/clients"
 	"github.com/amirhnajafiz/authX/internal/repository/users"
+
+	"gorm.io/gorm"
 )
 
 // Repository manages the database entities.
@@ -14,10 +16,10 @@ type Repository struct {
 }
 
 // New repository.
-func New() Repository {
+func New(db *gorm.DB) Repository {
 	return Repository{
-		Apps:    apps.New(),
-		Clients: clients.New(),
-		Users:   users.New(),
+		Apps:    apps.New(db),
+		Clients: clients.New(db),
+		Users:   users.New(db),
 	}
 }
