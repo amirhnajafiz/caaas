@@ -20,11 +20,16 @@ func (h *Handler) CreateApp(ctx *fiber.Ctx) error {
 		return fiber.ErrBadRequest
 	}
 
+	user, err := h.Repository.Users.GetByEmail(ctx.Locals("email").(string))
+	if err != nil {
+		return fiber.ErrBadRequest
+	}
+
 	appInstance := model.App{
 		Name:      userRequest.Name,
 		Key:       uuid.New().String()[:15],
 		URI:       uuid.NewString()[:10],
-		UserID:    0, // todo: find user id from token
+		UserID:    user.ID,
 		CreatedAt: time.Now(),
 	}
 
