@@ -26,7 +26,7 @@ func New(cfg Config) *Auth {
 }
 
 // GenerateJWT creates a new JWT token.
-func (a *Auth) GenerateJWT(username string, password string) (string, time.Time, error) {
+func (a *Auth) GenerateJWT(email string) (string, time.Time, error) {
 	// create a new token
 	token := jwt.New(jwt.SigningMethodHS256)
 	expireTime := time.Now().Add(time.Duration(a.expire) * time.Minute)
@@ -34,8 +34,7 @@ func (a *Auth) GenerateJWT(username string, password string) (string, time.Time,
 	// create claims
 	claims := token.Claims.(jwt.MapClaims)
 	claims["exp"] = expireTime.Unix()
-	claims["username"] = username
-	claims["password"] = password
+	claims["email"] = email
 
 	// generate token string
 	tokenString, err := token.SignedString([]byte(a.key))
@@ -47,7 +46,7 @@ func (a *Auth) GenerateJWT(username string, password string) (string, time.Time,
 }
 
 // ParseJWT gets a token string and extracts the data.
-func (a *Auth) ParseJWT(tokenString string) (string, string, error) {
+func (a *Auth) ParseJWT(tokenString string) (string, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return "", errSigningMethod
@@ -56,16 +55,15 @@ func (a *Auth) ParseJWT(tokenString string) (string, string, error) {
 		return []byte(a.key), nil
 	})
 	if err != nil {
-		return "", "", err
+		return "", err
 	}
 
 	// taking out claims
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		username := claims["username"].(string)
-		password := claims["password"].(string)
+		email := claims["email"].(string)
 
-		return username, password, nil
+		return email, nil
 	}
 
-	return "", "", errInvalidToken
+	return "", errInvalidToken
 }
