@@ -9,7 +9,6 @@ import (
 type Apps interface {
 	Create(app *model.App) error
 	GetSingle(id uint) (*model.App, error)
-	Delete(id uint) error
 }
 
 func New(db *gorm.DB) Apps {
@@ -23,13 +22,15 @@ type apps struct {
 }
 
 func (a *apps) Create(app *model.App) error {
-	return nil
+	return a.db.Create(app).Error
 }
 
 func (a *apps) GetSingle(id uint) (*model.App, error) {
-	return nil, nil
-}
+	app := new(model.App)
 
-func (a *apps) Delete(id uint) error {
-	return nil
+	if err := a.db.First(&app).Where("id = ?", id).Error; err != nil {
+		return nil, err
+	}
+
+	return app, nil
 }
