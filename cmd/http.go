@@ -15,7 +15,7 @@ import (
 // HTTP command.
 type HTTP struct{}
 
-// main function of http command.
+// main function of HTTP command.
 func (h HTTP) main(port int) {
 	app := fiber.New()
 
