@@ -32,7 +32,6 @@ func (h HTTP) main(port int) {
 
 	v1.Put("/api/app", handlerInstance.CreateApp)
 	v1.Get("/api/app/:app_id", handlerInstance.GetAppClient)
-	v1.Delete("/api/app/:app_id", handlerInstance.RemoveApp)
 	v1.Put("/api/app/:app_id/client", handlerInstance.AddClient)
 	v1.Get("/api/app/:app_id/client/:client_id", handlerInstance.GetAppClient)
 
