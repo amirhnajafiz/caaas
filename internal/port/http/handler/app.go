@@ -1,14 +1,15 @@
 package handler
 
 import (
-	"github.com/amirhnajafiz/authX/internal/port/http/response"
 	"strconv"
 	"time"
 
 	"github.com/amirhnajafiz/authX/internal/model"
 	"github.com/amirhnajafiz/authX/internal/port/http/request"
+	"github.com/amirhnajafiz/authX/internal/port/http/response"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/google/uuid"
 )
 
 // CreateApp for a user.
@@ -21,9 +22,9 @@ func (h *Handler) CreateApp(ctx *fiber.Ctx) error {
 
 	appInstance := model.App{
 		Name:      userRequest.Name,
-		Key:       "", // todo: create a api key
-		URI:       "", // todo: create a unique id
-		UserID:    0,  // todo: find user id from token
+		Key:       uuid.New().String()[:15],
+		URI:       uuid.NewString()[:10],
+		UserID:    0, // todo: find user id from token
 		CreatedAt: time.Now(),
 	}
 
