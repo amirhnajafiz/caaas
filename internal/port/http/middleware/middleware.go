@@ -1,3 +1,9 @@
 package middleware
 
-type Middleware struct{}
+import (
+	"github.com/amirhnajafiz/authX/internal/repository"
+)
+
+type Middleware struct {
+	Repository repository.Repository
+}

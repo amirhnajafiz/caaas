@@ -1,3 +1,9 @@
 package handler
 
-type Handler struct{}
+import (
+	"github.com/amirhnajafiz/authX/internal/repository"
+)
+
+type Handler struct {
+	Repository repository.Repository
+}
