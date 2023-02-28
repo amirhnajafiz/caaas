@@ -37,5 +37,19 @@ func (h *Handler) Signup(ctx *fiber.Ctx) error {
 
 // Login a user into AuthX.
 func (h *Handler) Login(ctx *fiber.Ctx) error {
-	return nil
+	userRequest := new(request.Register)
+
+	if err := ctx.BodyParser(&userRequest); err != nil {
+		return fiber.ErrBadRequest
+	}
+
+	if user, err := h.Repository.Users.GetByEmail(userRequest.Email); err != nil || user == nil {
+		return fiber.ErrNotFound
+	} else {
+		if user.Password != userRequest.Password {
+			return fiber.ErrNotFound
+		}
+	}
+
+	return ctx.SendString("token")
 }
