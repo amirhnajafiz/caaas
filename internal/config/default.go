@@ -10,7 +10,7 @@ import (
 func Default() Config {
 	return Config{
 		Auth: auth.Config{
-			PrivateKey: "",
+			PrivateKey: "private",
 			ExpireTime: 5,
 		},
 		Logger: logger.Config{
