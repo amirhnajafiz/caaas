@@ -11,6 +11,7 @@ import (
 	"github.com/amirhnajafiz/authX/pkg/auth"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/template/html"
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
 )
@@ -29,8 +30,14 @@ func (h HTTP) Command() *cobra.Command {
 
 // main function of HTTP command.
 func (h HTTP) main() {
+	// create fiber engine
+	engine := html.New("./views", ".html")
+
 	// create a new fiber app
-	app := fiber.New()
+	app := fiber.New(fiber.Config{
+		Views:       engine,
+		ViewsLayout: "layouts",
+	})
 
 	// open db connection
 	db, err := storage.NewConnection(h.Cfg.Storage)
