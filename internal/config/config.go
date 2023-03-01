@@ -3,15 +3,24 @@ package config
 import (
 	"log"
 
+	"github.com/amirhnajafiz/authX/internal/port/http"
+	"github.com/amirhnajafiz/authX/internal/storage"
+	"github.com/amirhnajafiz/authX/pkg/auth"
+
 	"github.com/knadh/koanf"
 	"github.com/knadh/koanf/parsers/yaml"
 	"github.com/knadh/koanf/providers/file"
 	"github.com/knadh/koanf/providers/structs"
 )
 
+// Config stores the application parameters.
 type Config struct {
+	Auth    auth.Config    `koanf:"auth"`
+	HTTP    http.Config    `koanf:"http"`
+	Storage storage.Config `koanf:"storage"`
 }
 
+// LoadConfigs returns the config struct.
 func LoadConfigs() Config {
 	var instance Config
 
