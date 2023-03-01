@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/amirhnajafiz/authX/internal/config"
 	"github.com/amirhnajafiz/authX/internal/port/http/handler"
@@ -29,7 +28,7 @@ func (h HTTP) main() {
 	// open db connection
 	db, err := storage.NewConnection(h.Cfg.Storage)
 	if err != nil {
-		log.Println(err)
+		h.Logger.Error("database connection failed", zap.Error(err))
 
 		return
 	}
@@ -59,6 +58,8 @@ func (h HTTP) main() {
 		v1 = app.Use(middlewareInstance.Authenticate)
 	} else {
 		v1 = app
+
+		h.Logger.Warn("authentication is off")
 	}
 
 	v1.Get("/home", handlerInstance.HomeView)
@@ -68,7 +69,7 @@ func (h HTTP) main() {
 	v1.Put("/api/app/:app_id/client", handlerInstance.AddClient)
 	v1.Get("/api/app/:app_id/client/:client_id", handlerInstance.GetAppClient)
 
-	if err := app.Listen(fmt.Sprintf(":%d", h.Cfg.HTTP.Port)); err != nil {
-		log.Println(err)
+	if er := app.Listen(fmt.Sprintf(":%d", h.Cfg.HTTP.Port)); er != nil {
+		h.Logger.Error("start app failed", zap.Error(er))
 	}
 }

@@ -19,15 +19,17 @@ func (m Migrate) main() {
 	// open db
 	db, err := storage.NewConnection(m.Cfg.Storage)
 	if err != nil {
-		panic(err)
+		m.Logger.Error("database connection failed", zap.Error(err))
+
+		return
 	}
 
 	// migrate into database
-	if err := db.AutoMigrate(
+	if er := db.AutoMigrate(
 		&model.App{},
 		&model.User{},
 		&model.Client{},
-	); err != nil {
-		panic(err)
+	); er != nil {
+		m.Logger.Error("migration failed", zap.Error(er))
 	}
 }
