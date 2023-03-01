@@ -4,6 +4,7 @@ import (
 	"github.com/amirhnajafiz/authX/internal/port/http"
 	"github.com/amirhnajafiz/authX/internal/storage"
 	"github.com/amirhnajafiz/authX/pkg/auth"
+	"github.com/amirhnajafiz/authX/pkg/logger"
 )
 
 func Default() Config {
@@ -11,6 +12,10 @@ func Default() Config {
 		Auth: auth.Config{
 			PrivateKey: "",
 			ExpireTime: 5,
+		},
+		Logger: logger.Config{
+			Level:  "debug",
+			Enable: false,
 		},
 		HTTP: http.Config{
 			Port:       5000,

@@ -6,6 +6,7 @@ import (
 	"github.com/amirhnajafiz/authX/internal/port/http"
 	"github.com/amirhnajafiz/authX/internal/storage"
 	"github.com/amirhnajafiz/authX/pkg/auth"
+	"github.com/amirhnajafiz/authX/pkg/logger"
 
 	"github.com/knadh/koanf"
 	"github.com/knadh/koanf/parsers/yaml"
@@ -16,6 +17,7 @@ import (
 // Config stores the application parameters.
 type Config struct {
 	Auth    auth.Config    `koanf:"auth"`
+	Logger  logger.Config  `koanf:"logger"`
 	HTTP    http.Config    `koanf:"http"`
 	Storage storage.Config `koanf:"storage"`
 }
