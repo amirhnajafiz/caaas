@@ -10,6 +10,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
+	"go.uber.org/zap"
 )
 
 // CreateApp for a user.
@@ -17,11 +18,15 @@ func (h *Handler) CreateApp(ctx *fiber.Ctx) error {
 	userRequest := new(request.NewApp)
 
 	if err := ctx.BodyParser(&userRequest); err != nil {
+		h.Logger.Info("body parsing failed", zap.Error(err))
+
 		return fiber.ErrBadRequest
 	}
 
 	user, err := h.Repository.Users.GetByEmail(ctx.Locals("email").(string))
 	if err != nil {
+		h.Logger.Info("user not found", zap.String("email", ctx.Locals("email").(string)))
+
 		return fiber.ErrBadRequest
 	}
 
@@ -34,12 +39,14 @@ func (h *Handler) CreateApp(ctx *fiber.Ctx) error {
 	}
 
 	if err := h.Repository.Apps.Create(&appInstance); err != nil {
+		h.Logger.Error("failed to create app instance", zap.Error(err))
+
 		return fiber.ErrInternalServerError
 	}
 
 	return ctx.JSON(fiber.Map{
 		"api_key": appInstance.Key,
-		"uri_id":  appInstance.URI,
+		"uri":     appInstance.URI,
 	})
 }
 
@@ -50,11 +57,15 @@ func (h *Handler) GetSingleApp(ctx *fiber.Ctx) error {
 
 	app, err := h.Repository.Apps.GetSingle(appID)
 	if err != nil {
+		h.Logger.Error("app not found", zap.Uint("id", appID))
+
 		return fiber.ErrNotFound
 	}
 
 	clients, err := h.Repository.Clients.GetAppClients(app.ID)
 	if err != nil {
+		h.Logger.Error("cannot get clients", zap.Error(err))
+
 		return fiber.ErrInternalServerError
 	}
 
