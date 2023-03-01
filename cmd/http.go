@@ -11,6 +11,7 @@ import (
 	"github.com/amirhnajafiz/authX/pkg/auth"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/spf13/cobra"
 	"go.uber.org/zap"
 )
 
@@ -18,6 +19,12 @@ import (
 type HTTP struct {
 	Cfg    config.Config
 	Logger *zap.Logger
+}
+
+// Command returns the cobra command.
+func (h HTTP) Command() *cobra.Command {
+	run := func(cmd *cobra.Command, args []string) { h.main() }
+	return &cobra.Command{Use: "http", Run: run}
 }
 
 // main function of HTTP command.
