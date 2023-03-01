@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/amirhnajafiz/authX/internal/config"
 	"github.com/amirhnajafiz/authX/internal/port/http/handler"
 	"github.com/amirhnajafiz/authX/internal/port/http/middleware"
 	"github.com/amirhnajafiz/authX/internal/repository"
@@ -17,10 +18,13 @@ type HTTP struct{}
 
 // main function of HTTP command.
 func (h HTTP) main(port int) {
+	// loading configs
+	cfg := config.LoadConfigs()
+
 	app := fiber.New()
 
 	// open db connection
-	db, err := storage.NewConnection(storage.Config{})
+	db, err := storage.NewConnection(cfg.Storage)
 	if err != nil {
 		log.Println(err)
 
@@ -43,7 +47,13 @@ func (h HTTP) main(port int) {
 	app.Post("/api/login", handlerInstance.Login)
 	app.Put("/api/signup", handlerInstance.Signup)
 
-	v1 := app.Use(middlewareInstance.Authenticate)
+	// auth enable check
+	var v1 fiber.Router
+	if cfg.HTTP.EnableAuth {
+		v1 = app.Use(middlewareInstance.Authenticate)
+	} else {
+		v1 = app
+	}
 
 	v1.Get("/home", handlerInstance.HomeView)
 
