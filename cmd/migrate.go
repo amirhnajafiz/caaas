@@ -18,7 +18,7 @@ type Migrate struct {
 // Command returns the cobra command.
 func (m Migrate) Command() *cobra.Command {
 	run := func(cmd *cobra.Command, args []string) { m.main() }
-	return &cobra.Command{Use: "http", Run: run}
+	return &cobra.Command{Use: "migrate", Run: run}
 }
 
 // main function of Migrate command.
