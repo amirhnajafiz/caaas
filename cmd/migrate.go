@@ -5,6 +5,7 @@ import (
 	"github.com/amirhnajafiz/authX/internal/model"
 	"github.com/amirhnajafiz/authX/internal/storage"
 
+	"github.com/spf13/cobra"
 	"go.uber.org/zap"
 )
 
@@ -12,6 +13,12 @@ import (
 type Migrate struct {
 	Cfg    config.Config
 	Logger *zap.Logger
+}
+
+// Command returns the cobra command.
+func (m Migrate) Command() *cobra.Command {
+	run := func(cmd *cobra.Command, args []string) { m.main() }
+	return &cobra.Command{Use: "http", Run: run}
 }
 
 // main function of Migrate command.
