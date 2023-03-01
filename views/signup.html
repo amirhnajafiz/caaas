@@ -3,8 +3,12 @@
 </h1>
 <form>
   <form action="/api/signup" method="post">
+    <input type="hidden" name="_method" value="put" />
     <input type="email" name="email" placeholder="xxx@gmail.com" />
     <input type="password" name="password" placeholder="pa$$word" />
     <input type="submit" value="Login" />
   </form>
 </form>
+<a href="/">
+  Home
+</a>
