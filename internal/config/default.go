@@ -18,8 +18,7 @@ func Default() Config {
 			Enable: false,
 		},
 		HTTP: http.Config{
-			Port:       5000,
-			EnableAuth: false,
+			Port: 5000,
 		},
 		Storage: storage.Config{
 			Port:     3306,

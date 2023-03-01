@@ -52,15 +52,7 @@ func (h HTTP) main() {
 	app.Post("/api/login", handlerInstance.Login)
 	app.Put("/api/signup", handlerInstance.Signup)
 
-	// auth enable check
-	var v1 fiber.Router
-	if h.Cfg.HTTP.EnableAuth {
-		v1 = app.Use(middlewareInstance.Authenticate)
-	} else {
-		v1 = app
-
-		h.Logger.Warn("authentication is off")
-	}
+	v1 := app.Use(middlewareInstance.Authenticate)
 
 	v1.Get("/home", handlerInstance.HomeView)
 
