@@ -36,7 +36,7 @@ func (h HTTP) main() {
 	// create a new fiber app
 	app := fiber.New(fiber.Config{
 		Views:       engine,
-		ViewsLayout: "layouts",
+		ViewsLayout: "layouts/main",
 	})
 
 	// open db connection
