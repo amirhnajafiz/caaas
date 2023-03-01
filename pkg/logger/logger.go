@@ -10,16 +10,11 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
-const (
-	level   = "debug"
-	enabled = false
-)
-
 // NewLogger generates a new zap logger.
-func NewLogger() *zap.Logger {
+func NewLogger(cfg Config) *zap.Logger {
 	var lvl zapcore.Level
-	if err := lvl.Set(level); err != nil {
-		log.Printf("cannot parse log level %s: %s", level, err)
+	if err := lvl.Set(cfg.Level); err != nil {
+		log.Printf("cannot parse log level %s: %s", cfg.Level, err)
 
 		lvl = zapcore.WarnLevel
 	}
@@ -30,7 +25,7 @@ func NewLogger() *zap.Logger {
 		defaultCore,
 	}
 
-	if enabled {
+	if cfg.Enable {
 		p := getPriorityFromLevel(lvl.String()) | syslog.LOG_LOCAL0
 		encoder := zapcore.NewJSONEncoder(zap.NewProductionEncoderConfig())
 
