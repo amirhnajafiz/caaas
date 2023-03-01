@@ -51,5 +51,7 @@ func (h *Handler) Login(ctx *fiber.Ctx) error {
 		}
 	}
 
-	return ctx.SendString("token")
+	ctx.Set("token", "token")
+
+	return ctx.Redirect("/home", http.StatusFound)
 }
