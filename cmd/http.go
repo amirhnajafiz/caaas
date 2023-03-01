@@ -9,6 +9,7 @@ import (
 	"github.com/amirhnajafiz/authX/internal/port/http/middleware"
 	"github.com/amirhnajafiz/authX/internal/repository"
 	"github.com/amirhnajafiz/authX/internal/storage"
+	"github.com/amirhnajafiz/authX/pkg/auth"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -39,6 +40,7 @@ func (h HTTP) main(port int) {
 	}
 	middlewareInstance := middleware.Middleware{
 		Repository: r,
+		Auth:       *auth.New(cfg.Auth),
 	}
 
 	app.Get("/login", handlerInstance.LoginView)
