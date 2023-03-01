@@ -10,27 +10,24 @@ import (
 	"github.com/amirhnajafiz/authX/internal/repository"
 	"github.com/amirhnajafiz/authX/internal/storage"
 	"github.com/amirhnajafiz/authX/pkg/auth"
-	"github.com/amirhnajafiz/authX/pkg/logger"
 
 	"github.com/gofiber/fiber/v2"
+	"go.uber.org/zap"
 )
 
 // HTTP command.
-type HTTP struct{}
+type HTTP struct {
+	Cfg    config.Config
+	Logger *zap.Logger
+}
 
 // main function of HTTP command.
-func (h HTTP) main(port int) {
-	// loading configs
-	cfg := config.LoadConfigs()
-
-	// create a new logger
-	l := logger.NewLogger(cfg.Logger)
-
+func (h HTTP) main() {
 	// create a new fiber app
 	app := fiber.New()
 
 	// open db connection
-	db, err := storage.NewConnection(cfg.Storage)
+	db, err := storage.NewConnection(h.Cfg.Storage)
 	if err != nil {
 		log.Println(err)
 
@@ -41,13 +38,13 @@ func (h HTTP) main(port int) {
 	r := repository.New(db)
 
 	handlerInstance := handler.Handler{
-		Logger:     l.Named("handler"),
+		Logger:     h.Logger.Named("handler"),
 		Repository: r,
 	}
 	middlewareInstance := middleware.Middleware{
+		Auth:       *auth.New(h.Cfg.Auth),
+		Logger:     h.Logger.Named("middleware"),
 		Repository: r,
-		Auth:       *auth.New(cfg.Auth),
-		Logger:     l.Named("middleware"),
 	}
 
 	app.Get("/login", handlerInstance.LoginView)
@@ -58,7 +55,7 @@ func (h HTTP) main(port int) {
 
 	// auth enable check
 	var v1 fiber.Router
-	if cfg.HTTP.EnableAuth {
+	if h.Cfg.HTTP.EnableAuth {
 		v1 = app.Use(middlewareInstance.Authenticate)
 	} else {
 		v1 = app
@@ -71,7 +68,7 @@ func (h HTTP) main(port int) {
 	v1.Put("/api/app/:app_id/client", handlerInstance.AddClient)
 	v1.Get("/api/app/:app_id/client/:client_id", handlerInstance.GetAppClient)
 
-	if err := app.Listen(fmt.Sprintf(":%d", port)); err != nil {
+	if err := app.Listen(fmt.Sprintf(":%d", h.Cfg.HTTP.Port)); err != nil {
 		log.Println(err)
 	}
 }

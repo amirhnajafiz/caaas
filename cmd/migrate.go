@@ -4,18 +4,20 @@ import (
 	"github.com/amirhnajafiz/authX/internal/config"
 	"github.com/amirhnajafiz/authX/internal/model"
 	"github.com/amirhnajafiz/authX/internal/storage"
+
+	"go.uber.org/zap"
 )
 
 // Migrate command.
-type Migrate struct{}
+type Migrate struct {
+	Cfg    config.Config
+	Logger *zap.Logger
+}
 
 // main function of Migrate command.
 func (m Migrate) main() {
-	// load configs
-	cfg := config.LoadConfigs()
-
 	// open db
-	db, err := storage.NewConnection(cfg.Storage)
+	db, err := storage.NewConnection(m.Cfg.Storage)
 	if err != nil {
 		panic(err)
 	}
