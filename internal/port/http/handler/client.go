@@ -2,9 +2,10 @@ package handler
 
 import (
 	"fmt"
-	"github.com/amirhnajafiz/authX/internal/model"
 	"net/http"
 	"strconv"
+
+	"github.com/amirhnajafiz/authX/internal/model"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -44,5 +45,14 @@ func (h *Handler) GetAppClient(ctx *fiber.Ctx) error {
 	id, _ = strconv.Atoi(ctx.Params("client_id"))
 	clientID := uint(id)
 
-	return nil
+	client, err := h.Repository.Clients.GetSingle(clientID)
+	if err != nil {
+		return fiber.ErrNotFound
+	}
+
+	if client.AppID != appID {
+		return fiber.ErrForbidden
+	}
+
+	return ctx.JSON(client)
 }
