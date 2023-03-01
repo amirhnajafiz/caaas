@@ -30,17 +30,17 @@ func LoadConfigs() Config {
 
 	// load default
 	if err := k.Load(structs.Provider(Default(), "koanf"), nil); err != nil {
-		log.Fatalf("error loading deafult: %v\n", err)
+		log.Printf("error loading deafult: %v\n", err)
 	}
 
 	// load configs file
 	if err := k.Load(file.Provider("config.yaml"), yaml.Parser()); err != nil {
-		log.Fatalf("error loading config.yaml file: %v\n", err)
+		log.Printf("error loading config.yaml file: %v\n", err)
 	}
 
 	// unmarshalling
 	if err := k.Unmarshal("", &instance); err != nil {
-		log.Fatalf("error unmarshalling config: %v\n", err)
+		log.Printf("error unmarshalling config: %v\n", err)
 	}
 
 	return instance
