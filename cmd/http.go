@@ -10,6 +10,7 @@ import (
 	"github.com/amirhnajafiz/authX/internal/repository"
 	"github.com/amirhnajafiz/authX/internal/storage"
 	"github.com/amirhnajafiz/authX/pkg/auth"
+	"github.com/amirhnajafiz/authX/pkg/logger"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -22,6 +23,10 @@ func (h HTTP) main(port int) {
 	// loading configs
 	cfg := config.LoadConfigs()
 
+	// create a new logger
+	l := logger.NewLogger(cfg.Logger)
+
+	// create a new fiber app
 	app := fiber.New()
 
 	// open db connection
@@ -36,11 +41,13 @@ func (h HTTP) main(port int) {
 	r := repository.New(db)
 
 	handlerInstance := handler.Handler{
+		Logger:     l.Named("handler"),
 		Repository: r,
 	}
 	middlewareInstance := middleware.Middleware{
 		Repository: r,
 		Auth:       *auth.New(cfg.Auth),
+		Logger:     l.Named("middleware"),
 	}
 
 	app.Get("/login", handlerInstance.LoginView)
