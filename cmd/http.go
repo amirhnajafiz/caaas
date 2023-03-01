@@ -60,6 +60,8 @@ func (h HTTP) main() {
 		Repository: r,
 	}
 
+	app.Static("/", "./public")
+
 	app.Get("/", handlerInstance.RootView)
 	app.Get("/login", handlerInstance.LoginView)
 	app.Get("/signup", handlerInstance.SignupView)
