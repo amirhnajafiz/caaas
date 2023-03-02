@@ -1,11 +1,25 @@
 <h1>
     Login
 </h1>
-<form action="/api/login" method="post">
-    <input type="email" name="email" placeholder="xxx@gmail.com" />
-    <input type="password" name="password" placeholder="pa$$word" />
-    <input type="submit" value="Login" />
-</form>
+
+<label for="email">
+    Email
+</label>
+<input id="email" type="email" name="email" placeholder="xxx@gmail.com" />
+
+<label for="password">
+    Password
+</label>
+<input id="password" type="password" name="password" placeholder="pa$$word" />
+
+<button onclick="login()">Login</button>
+
 <a href="/">
-    Home
+    Back to Home
 </a>
+
+<script>
+    function login() {
+
+    }
+</script>
