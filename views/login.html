@@ -1,24 +1,26 @@
 {{template "partials/header" .}}
 
-<h1>
-    Login
-</h1>
+<div class="root">
+    <h1 class="root-header">
+        Login
+    </h1>
 
-<label for="email">
-    Email
-</label>
-<input id="email" type="email" name="email" placeholder="xxx@gmail.com" />
+    <label for="email">
+        Email
+    </label>
+    <input id="email" type="email" name="email" placeholder="xxx@gmail.com" />
 
-<label for="password">
-    Password
-</label>
-<input id="password" type="password" name="password" placeholder="pa$$word" />
+    <br />
 
-<button onclick="login()">Login</button>
+    <label for="password">
+        Password
+    </label>
+    <input id="password" type="password" name="password" placeholder="pa$$word" />
 
-<a href="/">
-    Back to Home
-</a>
+    <br />
+
+    <button onclick="login()">Login</button>
+</div>
 
 <script>
     const url = 'http://' + window.location.host;
