@@ -2,6 +2,7 @@ package handler
 
 import (
 	"fmt"
+	"go.uber.org/zap"
 	"net/http"
 	"strconv"
 
@@ -43,10 +44,14 @@ func (h *Handler) GetAppClient(ctx *fiber.Ctx) error {
 
 	client, err := h.Repository.Clients.GetSingle(clientID)
 	if err != nil {
+		h.Logger.Error("failed to find client", zap.Uint("id", clientID))
+
 		return fiber.ErrNotFound
 	}
 
 	if client.AppKey != appID {
+		h.Logger.Info("forbidden access")
+
 		return fiber.ErrForbidden
 	}
 
