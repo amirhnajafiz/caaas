@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"go.uber.org/zap"
 	"net/http"
 	"time"
 
@@ -15,10 +16,14 @@ func (h *Handler) Signup(ctx *fiber.Ctx) error {
 	userRequest := new(request.Register)
 
 	if err := ctx.BodyParser(&userRequest); err != nil {
+		h.Logger.Error("parsing body failed", zap.Error(err))
+
 		return fiber.ErrBadRequest
 	}
 
-	if u, err := h.Repository.Users.GetByEmail(userRequest.Email); err != nil || u != nil {
+	if user, err := h.Repository.Users.GetByEmail(userRequest.Email); err != nil || user != nil {
+		h.Logger.Info("user exists", zap.String("email", userRequest.Email))
+
 		return fiber.ErrNotAcceptable
 	}
 
@@ -29,6 +34,8 @@ func (h *Handler) Signup(ctx *fiber.Ctx) error {
 	}
 
 	if err := h.Repository.Users.Insert(&user); err != nil {
+		h.Logger.Error("insert user failed", zap.Error(err))
+
 		return fiber.ErrInternalServerError
 	}
 
