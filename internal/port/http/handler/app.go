@@ -62,7 +62,6 @@ func (h *Handler) GetSingleApp(ctx *fiber.Ctx) error {
 	}
 
 	return ctx.JSON(response.AppResponse{
-		Name:    app.Name,
 		Clients: clients,
 	})
 }
