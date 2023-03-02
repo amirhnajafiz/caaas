@@ -19,6 +19,7 @@
 </a>
 
 <script>
+  const url = 'http://' + window.location.host;
   function signup() {
     let mailElement = document.getElementById("email");
     let passElement = document.getElementById("password");
@@ -28,12 +29,12 @@
       "password": passElement.value
     }
 
-    fetch(window.location.host+"/api/signup", {
+    fetch(url+"/api/signup", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: data,
+      body: JSON.stringify(data),
     })
       .then((response) => {
         if (response.status === 201) {

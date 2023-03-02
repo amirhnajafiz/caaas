@@ -19,6 +19,7 @@
 </a>
 
 <script>
+    const url = 'http://' + window.location.host;
     function login() {
         let mailElement = document.getElementById("email");
         let passElement = document.getElementById("password");
@@ -28,7 +29,7 @@
             "password": passElement.value
         }
 
-        fetch(window.location.host+"/api/login", {
+        fetch(url+"/api/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -38,6 +39,7 @@
             .then((response) => response.text())
             .then((data) => {
                 localStorage.setItem("token", data);
+                console.log(data);
                 window.location.replace("/home");
             })
             .catch((error) => {
