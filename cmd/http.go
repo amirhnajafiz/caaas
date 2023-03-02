@@ -65,13 +65,12 @@ func (h HTTP) main() {
 	app.Get("/", handlerInstance.RootView)
 	app.Get("/login", handlerInstance.LoginView)
 	app.Get("/signup", handlerInstance.SignupView)
+	app.Get("/home", handlerInstance.HomeView)
 
 	app.Post("/api/login", handlerInstance.Login)
 	app.Put("/api/signup", handlerInstance.Signup)
 
 	v1 := app.Use(middlewareInstance.Authenticate)
-
-	v1.Get("/home", handlerInstance.HomeView)
 
 	v1.Put("/api/app", handlerInstance.CreateApp)
 	v1.Get("/api/app/:app_id", handlerInstance.GetAppClient)

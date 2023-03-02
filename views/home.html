@@ -2,6 +2,10 @@
     Home Page
 </h1>
 
-<div>
-    {{.token}}
+<div id="app">
+
 </div>
+
+<script>
+    document.getElementById("app").innerText = localStorage.getItem("token")
+</script>
