@@ -1,14 +1,13 @@
 package handler
 
 import (
-	"go.uber.org/zap"
 	"net/http"
-	"time"
 
 	"github.com/amirhnajafiz/authX/internal/model"
 	"github.com/amirhnajafiz/authX/internal/port/http/request"
 
 	"github.com/gofiber/fiber/v2"
+	"go.uber.org/zap"
 )
 
 // Signup a new user into AuthX.
@@ -28,9 +27,8 @@ func (h *Handler) Signup(ctx *fiber.Ctx) error {
 	}
 
 	user := model.User{
-		Email:     userRequest.Email,
-		Password:  userRequest.Password,
-		CreatedAt: time.Now(),
+		Email:    userRequest.Email,
+		Password: userRequest.Password,
 	}
 
 	if err := h.Repository.Users.Insert(&user); err != nil {
@@ -68,5 +66,12 @@ func (h *Handler) Login(ctx *fiber.Ctx) error {
 		return fiber.ErrInternalServerError
 	}
 
-	return ctx.SendString("token")
+	token, _, err := h.Auth.GenerateJWT(userRequest.Email)
+	if err != nil {
+		h.Logger.Error("failed to generate token", zap.Error(err))
+
+		return fiber.ErrInternalServerError
+	}
+
+	return ctx.SendString(token)
 }
