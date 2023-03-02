@@ -15,13 +15,13 @@
 .header-item {
     display: inline-block;
     margin-right: 30px;
-    background: #90ff72;
+    background: #00cb0a;
     border-radius: 4px;
     padding: 10px;
 }
 
 .header-item:hover {
-    background: #74cc5b;
+    background: #00cb0a;
     color: #eeeeee;
 }
 
@@ -29,4 +29,17 @@
     outline: none;
     color: inherit;
     text-decoration: none;
+}
+
+.root {
+    width: 50%;
+    margin: 50px auto;
+}
+
+.root-header {
+    margin-bottom: 25px;
+}
+
+.root-description {
+    text-align: justify;
 }
