@@ -20,6 +20,29 @@
 
 <script>
     function login() {
+        let mailElement = document.getElementById("email");
+        let passElement = document.getElementById("password");
 
+        let data = {
+            "email": mailElement.value,
+            "password": passElement.value
+        }
+
+        fetch(window.location.host+"/api/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        })
+            .then((response) => response.text())
+            .then((data) => {
+                localStorage.setItem("token", data);
+                window.location.replace("/home");
+            })
+            .catch((error) => {
+                console.error(error);
+                alert("Login Failed");
+            })
     }
 </script>
