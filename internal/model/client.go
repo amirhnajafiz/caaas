@@ -1,7 +1,11 @@
 package model
 
+import (
+	"gorm.io/gorm"
+)
+
 type Client struct {
-	ID          uint   `json:"id"`
+	gorm.Model
 	AppID       uint   `json:"app_id"`
 	Credentials string `json:"credentials"`
 }
