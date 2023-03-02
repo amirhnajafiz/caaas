@@ -66,7 +66,7 @@ func (h *Handler) Login(ctx *fiber.Ctx) error {
 		return fiber.ErrInternalServerError
 	}
 
-	token, _, err := h.Auth.GenerateJWT(userRequest.Email)
+	token, err := h.Auth.GenerateJWT(userRequest.Email)
 	if err != nil {
 		h.Logger.Error("failed to generate token", zap.Error(err))
 

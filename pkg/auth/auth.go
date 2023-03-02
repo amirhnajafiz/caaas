@@ -2,7 +2,6 @@ package auth
 
 import (
 	"errors"
-	"time"
 
 	"github.com/golang-jwt/jwt/v4"
 )
@@ -26,23 +25,21 @@ func New(cfg Config) *Auth {
 }
 
 // GenerateJWT creates a new JWT token.
-func (a *Auth) GenerateJWT(email string) (string, time.Time, error) {
+func (a *Auth) GenerateJWT(email string) (string, error) {
 	// create a new token
 	token := jwt.New(jwt.SigningMethodHS256)
-	expireTime := time.Now().Add(time.Duration(a.expire) * time.Minute)
 
 	// create claims
 	claims := token.Claims.(jwt.MapClaims)
-	claims["exp"] = expireTime.Unix()
 	claims["email"] = email
 
 	// generate token string
 	tokenString, err := token.SignedString([]byte(a.key))
 	if err != nil {
-		return "", expireTime, err
+		return "", err
 	}
 
-	return tokenString, expireTime, nil
+	return tokenString, nil
 }
 
 // ParseJWT gets a token string and extracts the data.

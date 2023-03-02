@@ -39,7 +39,7 @@ func (a *apps) GetSingle(key string) (*model.App, error) {
 func (a *apps) GetUserApps(userID uint) ([]*model.App, error) {
 	var list []*model.App
 
-	if err := a.db.Find(list).Where("user_id = ?", userID).Error; err != nil {
+	if err := a.db.Find(&list).Where("user_id = ?", userID).Error; err != nil {
 		return nil, err
 	}
 
