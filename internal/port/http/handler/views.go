@@ -21,6 +21,5 @@ func (h *Handler) SignupView(ctx *fiber.Ctx) error {
 
 // HomeView returns the home page of application.
 func (h *Handler) HomeView(ctx *fiber.Ctx) error {
-	// todo: get user apps
 	return ctx.Render("home", nil)
 }

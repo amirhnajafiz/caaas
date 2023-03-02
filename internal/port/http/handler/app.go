@@ -1,8 +1,7 @@
 package handler
 
 import (
-	"strconv"
-	"time"
+	"net/http"
 
 	"github.com/amirhnajafiz/authX/internal/model"
 	"github.com/amirhnajafiz/authX/internal/port/http/request"
@@ -31,11 +30,10 @@ func (h *Handler) CreateApp(ctx *fiber.Ctx) error {
 	}
 
 	appInstance := model.App{
-		Name:      userRequest.Name,
-		Key:       uuid.New().String()[:15],
-		URI:       uuid.NewString()[:10],
-		UserID:    user.ID,
-		CreatedAt: time.Now(),
+		Name:    userRequest.Name,
+		UserKey: uuid.New().String()[:15],
+		AppKey:  uuid.NewString()[:10],
+		UserID:  user.ID,
 	}
 
 	if err := h.Repository.Apps.Create(&appInstance); err != nil {
@@ -44,20 +42,14 @@ func (h *Handler) CreateApp(ctx *fiber.Ctx) error {
 		return fiber.ErrInternalServerError
 	}
 
-	return ctx.JSON(fiber.Map{
-		"api_key": appInstance.Key,
-		"uri":     appInstance.URI,
-	})
+	return ctx.SendStatus(http.StatusCreated)
 }
 
 // GetSingleApp of a user.
 func (h *Handler) GetSingleApp(ctx *fiber.Ctx) error {
-	id, _ := strconv.Atoi(ctx.Params("app_id"))
-	appID := uint(id)
-
-	app, err := h.Repository.Apps.GetSingle(appID)
+	app, err := h.Repository.Apps.GetSingle(ctx.Params("app_key"))
 	if err != nil {
-		h.Logger.Error("app not found", zap.Uint("id", appID))
+		h.Logger.Error("app not found", zap.String("id", ctx.Params("app_key")))
 
 		return fiber.ErrNotFound
 	}
@@ -70,7 +62,6 @@ func (h *Handler) GetSingleApp(ctx *fiber.Ctx) error {
 	}
 
 	return ctx.JSON(response.AppResponse{
-		ID:      appID,
 		Name:    app.Name,
 		Clients: clients,
 	})
