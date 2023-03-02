@@ -45,7 +45,7 @@ func (a *clients) GetAppClients(key string) ([]uint, error) {
 func (a *clients) GetSingle(id uint) (*model.Client, error) {
 	client := new(model.Client)
 
-	if err := a.db.Table("clients").Find(&client).Where("id = ?", id).Error; err != nil {
+	if err := a.db.First(&client, id).Error; err != nil {
 		return nil, err
 	}
 
