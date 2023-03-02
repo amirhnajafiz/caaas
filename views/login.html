@@ -40,7 +40,6 @@
             .then((data) => {
                 localStorage.setItem("token", data);
                 console.log(data);
-                window.location.replace("/home");
             })
             .catch((error) => {
                 console.error(error);

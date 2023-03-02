@@ -21,7 +21,7 @@ func (h *Handler) Signup(ctx *fiber.Ctx) error {
 		return fiber.ErrBadRequest
 	}
 
-	if user, err := h.Repository.Users.GetByEmail(userRequest.Email); err != nil || user != nil {
+	if user, err := h.Repository.Users.GetByEmail(userRequest.Email); err != nil || user == nil {
 		h.Logger.Info("user exists", zap.String("email", userRequest.Email))
 
 		return fiber.ErrNotAcceptable
@@ -47,15 +47,25 @@ func (h *Handler) Login(ctx *fiber.Ctx) error {
 	userRequest := new(request.Register)
 
 	if err := ctx.BodyParser(&userRequest); err != nil {
+		h.Logger.Error("failed to parse body", zap.Error(err))
+
 		return fiber.ErrBadRequest
 	}
 
-	if user, err := h.Repository.Users.GetByEmail(userRequest.Email); err != nil || user == nil {
+	if user, err := h.Repository.Users.GetByEmail(userRequest.Email); err != nil {
+		h.Logger.Error("user not found", zap.String("email", userRequest.Email))
+
 		return fiber.ErrNotFound
-	} else {
+	} else if user != nil {
 		if user.Password != userRequest.Password {
+			h.Logger.Info("incorrect password")
+
 			return fiber.ErrNotFound
 		}
+	} else {
+		h.Logger.Error("failed to fined user")
+
+		return fiber.ErrInternalServerError
 	}
 
 	return ctx.SendString("token")

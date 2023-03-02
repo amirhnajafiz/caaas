@@ -23,13 +23,25 @@ type users struct {
 }
 
 func (u *users) Insert(user *model.User) error {
-	return nil
+	return u.db.Create(user).Error
 }
 
 func (u *users) GetByID(id uint) (*model.User, error) {
-	return nil, nil
+	user := new(model.User)
+
+	if err := u.db.First(user).Where("id = ?", id).Error; err != nil {
+		return nil, err
+	}
+
+	return user, nil
 }
 
 func (u *users) GetByEmail(email string) (*model.User, error) {
-	return nil, nil
+	user := new(model.User)
+
+	if err := u.db.Find(user).Where("email = ?", email).Error; err != nil {
+		return nil, err
+	}
+
+	return user, nil
 }
