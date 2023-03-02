@@ -77,7 +77,7 @@ func (h *Handler) GetSingleApp(ctx *fiber.Ctx) error {
 		return fiber.ErrNotFound
 	}
 
-	clients, err := h.Repository.Clients.GetAppClients(app.ID)
+	clients, err := h.Repository.Clients.GetAppClients(app.AppKey)
 	if err != nil {
 		h.Logger.Error("cannot get clients", zap.Error(err))
 
