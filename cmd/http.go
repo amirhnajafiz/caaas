@@ -75,6 +75,7 @@ func (h HTTP) main() {
 
 	v1 := app.Use(middlewareInstance.Authenticate)
 
+	v1.Get("/api/app", handlerInstance.GetUserApps)
 	v1.Put("/api/app", handlerInstance.CreateApp)
 	v1.Get("/api/app/:app_key", handlerInstance.GetAppClient)
 	v1.Put("/api/app/:app_key/client", handlerInstance.AddClient)
