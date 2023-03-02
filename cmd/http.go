@@ -73,9 +73,9 @@ func (h HTTP) main() {
 	v1 := app.Use(middlewareInstance.Authenticate)
 
 	v1.Put("/api/app", handlerInstance.CreateApp)
-	v1.Get("/api/app/:app_id", handlerInstance.GetAppClient)
-	v1.Put("/api/app/:app_id/client", handlerInstance.AddClient)
-	v1.Get("/api/app/:app_id/client/:client_id", handlerInstance.GetAppClient)
+	v1.Get("/api/app/:app_key", handlerInstance.GetAppClient)
+	v1.Put("/api/app/:app_key/client", handlerInstance.AddClient)
+	v1.Get("/api/app/:app_key/client/:client_id", handlerInstance.GetAppClient)
 
 	if er := app.Listen(fmt.Sprintf(":%d", h.Cfg.HTTP.Port)); er != nil {
 		h.Logger.Error("start app failed", zap.Error(er))

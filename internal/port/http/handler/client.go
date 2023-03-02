@@ -12,9 +12,6 @@ import (
 
 // AddClient to an app.
 func (h *Handler) AddClient(ctx *fiber.Ctx) error {
-	id, _ := strconv.Atoi(ctx.Params("app_id"))
-	appID := uint(id)
-
 	claims := make(map[string]interface{})
 	if err := ctx.BodyParser(&claims); err != nil {
 		return fiber.ErrBadRequest
@@ -26,7 +23,7 @@ func (h *Handler) AddClient(ctx *fiber.Ctx) error {
 	}
 
 	client := model.Client{
-		AppID:       appID,
+		AppKey:      ctx.Params("app_key"),
 		Credentials: claimsString,
 	}
 
@@ -39,10 +36,9 @@ func (h *Handler) AddClient(ctx *fiber.Ctx) error {
 
 // GetAppClient credentials.
 func (h *Handler) GetAppClient(ctx *fiber.Ctx) error {
-	id, _ := strconv.Atoi(ctx.Params("app_id"))
-	appID := uint(id)
+	appID := ctx.Params("app_key")
 
-	id, _ = strconv.Atoi(ctx.Params("client_id"))
+	id, _ := strconv.Atoi(ctx.Params("client_id"))
 	clientID := uint(id)
 
 	client, err := h.Repository.Clients.GetSingle(clientID)
@@ -50,7 +46,7 @@ func (h *Handler) GetAppClient(ctx *fiber.Ctx) error {
 		return fiber.ErrNotFound
 	}
 
-	if client.AppID != appID {
+	if client.AppKey != appID {
 		return fiber.ErrForbidden
 	}
 

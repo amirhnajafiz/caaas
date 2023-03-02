@@ -6,6 +6,6 @@ import (
 
 type Client struct {
 	gorm.Model
-	AppID       uint   `json:"app_id"`
+	AppKey      string `json:"app_key"`
 	Credentials string `json:"credentials"`
 }

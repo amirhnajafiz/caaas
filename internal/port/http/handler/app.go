@@ -30,10 +30,9 @@ func (h *Handler) CreateApp(ctx *fiber.Ctx) error {
 	}
 
 	appInstance := model.App{
-		Name:    userRequest.Name,
-		UserKey: uuid.New().String()[:15],
-		AppKey:  uuid.NewString()[:10],
-		UserID:  user.ID,
+		Name:   userRequest.Name,
+		AppKey: uuid.NewString()[:10],
+		UserID: user.ID,
 	}
 
 	if err := h.Repository.Apps.Create(&appInstance); err != nil {
