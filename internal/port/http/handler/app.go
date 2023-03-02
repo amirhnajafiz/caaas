@@ -5,7 +5,6 @@ import (
 
 	"github.com/amirhnajafiz/authX/internal/model"
 	"github.com/amirhnajafiz/authX/internal/port/http/request"
-	"github.com/amirhnajafiz/authX/internal/port/http/response"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
@@ -44,6 +43,31 @@ func (h *Handler) CreateApp(ctx *fiber.Ctx) error {
 	return ctx.SendStatus(http.StatusCreated)
 }
 
+// GetUserApps returns all apps.
+func (h *Handler) GetUserApps(ctx *fiber.Ctx) error {
+	var list []string
+
+	user, err := h.Repository.Users.GetByEmail(ctx.Locals("email").(string))
+	if err != nil {
+		h.Logger.Info("user not found", zap.String("email", ctx.Locals("email").(string)))
+
+		return fiber.ErrBadRequest
+	}
+
+	apps, err := h.Repository.Apps.GetUserApps(user.ID)
+	if err != nil {
+		h.Logger.Error("faild to get apps", zap.Error(err))
+
+		return fiber.ErrInternalServerError
+	}
+
+	for _, app := range apps {
+		list = append(list, app.AppKey)
+	}
+
+	return ctx.JSON(list)
+}
+
 // GetSingleApp of a user.
 func (h *Handler) GetSingleApp(ctx *fiber.Ctx) error {
 	app, err := h.Repository.Apps.GetSingle(ctx.Params("app_key"))
@@ -60,7 +84,5 @@ func (h *Handler) GetSingleApp(ctx *fiber.Ctx) error {
 		return fiber.ErrInternalServerError
 	}
 
-	return ctx.JSON(response.AppResponse{
-		Clients: clients,
-	})
+	return ctx.JSON(clients)
 }
