@@ -1,14 +1,50 @@
 <h1>
   Signup
 </h1>
-<form>
-  <form action="/api/signup" method="post">
-    <input type="hidden" name="_method" value="put" />
-    <input type="email" name="email" placeholder="xxx@gmail.com" />
-    <input type="password" name="password" placeholder="pa$$word" />
-    <input type="submit" value="Login" />
-  </form>
-</form>
+
+<label for="email">
+  Email
+</label>
+<input id="email" type="email" name="email" placeholder="xxx@gmail.com" />
+
+<label for="password">
+  Password
+</label>
+<input id="password" type="password" name="password" placeholder="pa$$word" />
+
+<button onclick="signup()">Signup</button>
+
 <a href="/">
-  Home
+  Back to Home
 </a>
+
+<script>
+  function signup() {
+    let mailElement = document.getElementById("email");
+    let passElement = document.getElementById("password");
+
+    let data = {
+      "email": mailElement.value,
+      "password": passElement.value
+    }
+
+    fetch(window.location.host+"/api/signup", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => {
+        if (response.status === 201) {
+          window.location.replace("/login");
+        } else {
+          alert("Signup Failed by server")
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        alert("Signup Failed");
+      })
+  }
+</script>
