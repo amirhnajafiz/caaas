@@ -8,7 +8,7 @@ import (
 )
 
 type Middleware struct {
-	Auth       auth.Auth
+	Auth       *auth.Auth
 	Logger     *zap.Logger
 	Repository repository.Repository
 }

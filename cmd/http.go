@@ -47,15 +47,18 @@ func (h HTTP) main() {
 		return
 	}
 
+	a := auth.New(h.Cfg.Auth)
+
 	// create repository
 	r := repository.New(db)
 
 	handlerInstance := handler.Handler{
+		Auth:       a,
 		Logger:     h.Logger.Named("handler"),
 		Repository: r,
 	}
 	middlewareInstance := middleware.Middleware{
-		Auth:       *auth.New(h.Cfg.Auth),
+		Auth:       a,
 		Logger:     h.Logger.Named("middleware"),
 		Repository: r,
 	}
