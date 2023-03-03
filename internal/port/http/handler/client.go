@@ -2,11 +2,9 @@ package handler
 
 import (
 	"fmt"
+	"github.com/amirhnajafiz/authX/internal/model"
 	"go.uber.org/zap"
 	"net/http"
-	"strconv"
-
-	"github.com/amirhnajafiz/authX/internal/model"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -23,8 +21,15 @@ func (h *Handler) AddClient(ctx *fiber.Ctx) error {
 		claimsString = fmt.Sprintf("%s&%s=%s", claimsString, key, claims[key])
 	}
 
+	app, err := h.Repository.Apps.GetByKey(ctx.Params("app_key"))
+	if err != nil {
+		h.Logger.Error("app not found", zap.Error(err))
+
+		return fiber.ErrNotFound
+	}
+
 	client := model.Client{
-		AppKey:      ctx.Params("app_key"),
+		AppID:       app.ID,
 		Credentials: claimsString,
 	}
 
@@ -33,27 +38,4 @@ func (h *Handler) AddClient(ctx *fiber.Ctx) error {
 	}
 
 	return ctx.SendStatus(http.StatusCreated)
-}
-
-// GetAppClient credentials.
-func (h *Handler) GetAppClient(ctx *fiber.Ctx) error {
-	appID := ctx.Params("app_key")
-
-	id, _ := strconv.Atoi(ctx.Params("client_id"))
-	clientID := uint(id)
-
-	client, err := h.Repository.Clients.GetSingle(clientID)
-	if err != nil {
-		h.Logger.Error("failed to find client", zap.Uint("id", clientID))
-
-		return fiber.ErrNotFound
-	}
-
-	if client.AppKey != appID {
-		h.Logger.Info("forbidden access")
-
-		return fiber.ErrForbidden
-	}
-
-	return ctx.JSON(client)
 }

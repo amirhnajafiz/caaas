@@ -54,9 +54,9 @@ func (h *Handler) GetUserApps(ctx *fiber.Ctx) error {
 		return fiber.ErrBadRequest
 	}
 
-	apps, err := h.Repository.Apps.GetUserApps(user.ID)
+	apps, err := h.Repository.Apps.GetByUserID(user.ID)
 	if err != nil {
-		h.Logger.Error("faild to get apps", zap.Error(err))
+		h.Logger.Error("failed to get apps", zap.Error(err))
 
 		return fiber.ErrInternalServerError
 	}
@@ -70,14 +70,14 @@ func (h *Handler) GetUserApps(ctx *fiber.Ctx) error {
 
 // GetSingleApp of a user.
 func (h *Handler) GetSingleApp(ctx *fiber.Ctx) error {
-	app, err := h.Repository.Apps.GetSingle(ctx.Params("app_key"))
+	app, err := h.Repository.Apps.GetByKey(ctx.Params("app_key"))
 	if err != nil {
 		h.Logger.Error("app not found", zap.String("id", ctx.Params("app_key")))
 
 		return fiber.ErrNotFound
 	}
 
-	clients, err := h.Repository.Clients.GetAppClients(app.AppKey)
+	clients, err := h.Repository.Clients.GetAppClients(app.ID)
 	if err != nil {
 		h.Logger.Error("cannot get clients", zap.Error(err))
 
