@@ -47,7 +47,7 @@ func (h *Handler) CreateApp(ctx *fiber.Ctx) error {
 
 // GetUserApps returns all apps.
 func (h *Handler) GetUserApps(ctx *fiber.Ctx) error {
-	var list []response.AppResponse
+	var list []response.App
 
 	user, err := h.Repository.Users.GetByEmail(ctx.Locals("email").(string))
 	if err != nil {
@@ -64,7 +64,7 @@ func (h *Handler) GetUserApps(ctx *fiber.Ctx) error {
 	}
 
 	for _, app := range apps {
-		tmp := response.AppResponse{
+		tmp := response.App{
 			Name:      app.Name,
 			AppKey:    app.AppKey,
 			URL:       fmt.Sprintf("%s/api/app/%s/client", ctx.Hostname(), app.AppKey),
@@ -86,6 +86,8 @@ func (h *Handler) GetSingleApp(ctx *fiber.Ctx) error {
 		return fiber.ErrNotFound
 	}
 
+	var list []response.Client
+
 	clients, err := h.Repository.Clients.GetAppClients(app.ID)
 	if err != nil {
 		h.Logger.Error("cannot get clients", zap.Error(err))
@@ -93,5 +95,14 @@ func (h *Handler) GetSingleApp(ctx *fiber.Ctx) error {
 		return fiber.ErrInternalServerError
 	}
 
-	return ctx.JSON(clients)
+	for _, client := range clients {
+		tmp := response.Client{
+			Claims:    client.Credentials,
+			CreatedAt: client.CreatedAt,
+		}
+
+		list = append(list, tmp)
+	}
+
+	return ctx.JSON(list)
 }

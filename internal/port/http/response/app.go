@@ -2,7 +2,7 @@ package response
 
 import "time"
 
-type AppResponse struct {
+type App struct {
 	Name      string    `json:"name"`
 	AppKey    string    `json:"app_key"`
 	URL       string    `json:"url"`
