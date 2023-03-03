@@ -1,10 +1,12 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/amirhnajafiz/authX/internal/model"
 	"github.com/amirhnajafiz/authX/internal/port/http/request"
+	"github.com/amirhnajafiz/authX/internal/port/http/response"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
@@ -45,7 +47,7 @@ func (h *Handler) CreateApp(ctx *fiber.Ctx) error {
 
 // GetUserApps returns all apps.
 func (h *Handler) GetUserApps(ctx *fiber.Ctx) error {
-	var list []string
+	var list []response.AppResponse
 
 	user, err := h.Repository.Users.GetByEmail(ctx.Locals("email").(string))
 	if err != nil {
@@ -62,7 +64,14 @@ func (h *Handler) GetUserApps(ctx *fiber.Ctx) error {
 	}
 
 	for _, app := range apps {
-		list = append(list, app.AppKey)
+		tmp := response.AppResponse{
+			Name:      app.Name,
+			AppKey:    app.AppKey,
+			URL:       fmt.Sprintf("%s/api/app/%s/client", ctx.Hostname(), app.AppKey),
+			CreatedAt: app.CreatedAt,
+		}
+
+		list = append(list, tmp)
 	}
 
 	return ctx.JSON(list)
