@@ -1,0 +1,10 @@
+<div class="root">
+    {{range .clients}}
+        <pre>
+            {{ .claims }}
+        </pre>
+        <small>
+            {{ .created_at }}
+        </small>
+    {{end}}
+</div>
