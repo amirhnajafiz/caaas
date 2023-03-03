@@ -8,8 +8,8 @@ import (
 
 type Apps interface {
 	Create(app *model.App) error
-	GetSingle(key string) (*model.App, error)
-	GetUserApps(userID uint) ([]*model.App, error)
+	GetByKey(key string) (*model.App, error)
+	GetByUserID(userID uint) ([]*model.App, error)
 }
 
 func New(db *gorm.DB) Apps {
@@ -26,7 +26,7 @@ func (a *apps) Create(app *model.App) error {
 	return a.db.Create(app).Error
 }
 
-func (a *apps) GetSingle(key string) (*model.App, error) {
+func (a *apps) GetByKey(key string) (*model.App, error) {
 	app := new(model.App)
 
 	if err := a.db.First(&app).Where("app_key = ?", key).Error; err != nil {
@@ -36,7 +36,7 @@ func (a *apps) GetSingle(key string) (*model.App, error) {
 	return app, nil
 }
 
-func (a *apps) GetUserApps(userID uint) ([]*model.App, error) {
+func (a *apps) GetByUserID(userID uint) ([]*model.App, error) {
 	var list []*model.App
 
 	if err := a.db.Find(&list).Where("user_id = ?", userID).Error; err != nil {
