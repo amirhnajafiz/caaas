@@ -3,6 +3,7 @@ package handler
 import (
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/amirhnajafiz/authX/internal/model"
 	"github.com/amirhnajafiz/authX/internal/port/http/request"
@@ -67,8 +68,8 @@ func (h *Handler) GetUserApps(ctx *fiber.Ctx) error {
 		tmp := response.App{
 			Name:      app.Name,
 			AppKey:    app.AppKey,
-			URL:       fmt.Sprintf("%s/api/app/%s/client", ctx.Hostname(), app.AppKey),
-			CreatedAt: app.CreatedAt,
+			URL:       fmt.Sprintf("http://%s/api/app/%s/client", ctx.Hostname(), app.AppKey),
+			CreatedAt: app.CreatedAt.Format(time.RFC822),
 		}
 
 		list = append(list, tmp)
@@ -98,7 +99,7 @@ func (h *Handler) GetSingleApp(ctx *fiber.Ctx) error {
 	for _, client := range clients {
 		tmp := response.Client{
 			Claims:    client.Credentials,
-			CreatedAt: client.CreatedAt,
+			CreatedAt: client.CreatedAt.Format(time.RFC822),
 		}
 
 		list = append(list, tmp)

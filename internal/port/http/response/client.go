@@ -1,8 +1,6 @@
 package response
 
-import "time"
-
 type Client struct {
-	Claims    string    `json:"claims"`
-	CreatedAt time.Time `json:"created_at"`
+	Claims    string `json:"claims"`
+	CreatedAt string `json:"created_at"`
 }
