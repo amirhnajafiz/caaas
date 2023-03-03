@@ -43,3 +43,9 @@
 .root-description {
     text-align: justify;
 }
+
+.application {
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid gainsboro;
+}

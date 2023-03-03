@@ -1,3 +1,4 @@
+
 <div class="root">
     <h1 class="root-header">
         Home Page
@@ -7,5 +8,46 @@
 </div>
 
 <script>
-    document.getElementById("app").innerText = localStorage.getItem("token")
+    const url = 'http://' + window.location.host;
+
+    function getApps() {
+        fetch(url+"/api/app", {
+            headers: {
+                "token": localStorage.getItem("token")
+            }
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                data.forEach((item) => {
+                    document.getElementById("app").appendChild(createElement(item))
+                })
+            })
+            .catch((error) => {
+                console.log(error)
+                document.getElementById("app").innerText = "Apps not found";
+            })
+    }
+
+    function createElement(item) {
+        let holder = document.createElement("div")
+        let title = document.createElement("h3")
+        let link = document.createElement("p")
+        let key = document.createElement("p")
+        let date = document.createElement("small")
+
+        title.innerText = item["name"]
+        link.innerText = item["url"]
+        key.innerText = item["app_key"]
+        date.innerText = item["created_at"]
+
+        holder.classList.add("application")
+        holder.appendChild(title)
+        holder.appendChild(link)
+        holder.appendChild(key)
+        holder.appendChild(date)
+
+        return holder
+    }
+
+    getApps();
 </script>
