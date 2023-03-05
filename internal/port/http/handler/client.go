@@ -41,3 +41,34 @@ func (h *Handler) AddClient(ctx *fiber.Ctx) error {
 
 	return ctx.Status(http.StatusOK).SendString(token)
 }
+
+// GetClient by token.
+func (h *Handler) GetClient(ctx *fiber.Ctx) error {
+	// getting app key from params
+	appKey := ctx.Params("app_key")
+
+	// get user token
+	token := ctx.Query("token")
+
+	clientID, key, err := h.Auth.ParseJWT(token)
+	if err != nil {
+		h.Logger.Error("parse token failed", zap.Error(err))
+
+		return fiber.ErrBadRequest
+	}
+
+	// check app keys
+	if key != appKey {
+		return fiber.ErrUnauthorized
+	}
+
+	// get client from database
+	client, err := h.Repository.Clients.Get(clientID)
+	if err != nil {
+		h.Logger.Error("failed to find user", zap.Error(err))
+
+		return fiber.ErrNotFound
+	}
+
+	return ctx.Status(http.StatusOK).SendString(client.Credentials)
+}
