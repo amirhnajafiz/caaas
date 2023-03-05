@@ -23,7 +23,7 @@ func (h *Handler) Register(ctx *fiber.Ctx) error {
 	}
 
 	// check if user exists or not
-	if user, err := h.Repository.Users.Get(userRequest.StudentNumber); err != nil || user == nil {
+	if user, err := h.Repository.Users.Get(userRequest.StudentNumber); user != nil {
 		h.Logger.Info("user exists", zap.String("student number", userRequest.StudentNumber))
 
 		// check user password

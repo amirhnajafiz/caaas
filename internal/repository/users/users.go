@@ -33,8 +33,13 @@ func (u *users) Create(user *model.User) error {
 func (u *users) Get(studentNumber string) (*model.User, error) {
 	user := new(model.User)
 
-	if err := u.db.Find(user).Where("student_number = ?", studentNumber).Error; err != nil {
+	if err := u.db.Where("student_number = ?", studentNumber).Find(&user).Error; err != nil {
 		return nil, err
+	}
+
+	// user not found
+	if user.ID == 0 {
+		return nil, nil
 	}
 
 	return user, nil
