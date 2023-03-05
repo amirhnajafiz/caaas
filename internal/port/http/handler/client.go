@@ -31,6 +31,29 @@ func (h *Handler) AddClient(ctx *fiber.Ctx) error {
 		return fiber.ErrInternalServerError
 	}
 
+	return ctx.Status(http.StatusOK).SendString(client.ClientID)
+}
+
+// CheckClient checks a existent client.
+func (h *Handler) CheckClient(ctx *fiber.Ctx) error {
+	// getting app key from params
+	appKey := ctx.Params("app_key")
+
+	// get user token
+	clientID := ctx.Query("id")
+
+	// get client from database
+	client, err := h.Repository.Clients.Get(clientID)
+	if err != nil {
+		h.Logger.Error("failed to find user", zap.Error(err))
+
+		return fiber.ErrNotFound
+	}
+
+	if client.AppKey != appKey {
+		return fiber.ErrUnauthorized
+	}
+
 	// generate a new jwt token
 	token, err := h.Auth.GenerateJWT(client.ClientID, client.AppKey)
 	if err != nil {
