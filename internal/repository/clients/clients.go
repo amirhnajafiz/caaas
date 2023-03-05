@@ -9,7 +9,7 @@ import (
 // Clients manages the client model.
 type Clients interface {
 	Create(client *model.Client) error
-	GetSingle(clientID string) (*model.Client, error)
+	Get(clientID string) (*model.Client, error)
 }
 
 // New generates a new client repository.
@@ -29,11 +29,11 @@ func (a *clients) Create(client *model.Client) error {
 	return a.db.Create(client).Error
 }
 
-// GetSingle client.
-func (a *clients) GetSingle(clientID string) (*model.Client, error) {
+// Get client.
+func (a *clients) Get(clientID string) (*model.Client, error) {
 	client := new(model.Client)
 
-	if err := a.db.First(&client).Where("client_id = ?", clientID).Error; err != nil {
+	if err := a.db.Find(&client).Where("client_id = ?", clientID).Error; err != nil {
 		return nil, err
 	}
 
