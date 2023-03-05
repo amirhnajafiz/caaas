@@ -27,3 +27,12 @@ function register() {
             alert("Registration Failed");
         })
 }
+
+function copy() {
+    let text = document.getElementById("response").innerText
+
+    navigator.clipboard.writeText(text)
+        .catch((error) => {
+            console.log(error)
+        });
+}
