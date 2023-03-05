@@ -33,4 +33,6 @@ function copy() {
     let text = document.getElementById("response").value
 
     navigator.clipboard.writeText(text);
+
+    alert("API Key copied to clipboard!");
 }
