@@ -47,6 +47,12 @@ curl --location --request PUT 'http://127.0.0.1:8080/api/app/{API_KEY}' \
       "password": "1234"
   }'
             </pre>
+            <div>
+              A simple response would be like this, which is the Client ID:
+            </div>
+            <pre class="mt-4 mb-4">
+aac14ec0-8
+            </pre>
           </div>
           <div class="mb-4 pb-4 border-bottom">
             <h3 class="mb-2">
@@ -58,13 +64,15 @@ curl --location --request PUT 'http://127.0.0.1:8080/api/app/{API_KEY}' \
               that token.
             </div>
             <pre class="mt-4 mb-4">
-curl --location 'http://127.0.0.1:8080/api/app/9db94887-f638-4?id=aac14ec0-0' \
-  --header 'Content-Type: application/json' \
-  --data '{
-      "email": "amirhossein",
-      "password": "fellan"
-  }'
+curl --location --request POST 'http://127.0.0.1:8080/api/app/9db94887-f638-4?id=aac14ec0-0' \
+  --header 'Content-Type: application/json'
             </pre>
+          <div>
+              A simple response would be like this, which is the Token for getting user:
+          </div>
+          <pre class="mt-4 mb-4">
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfa2V5IjoiOWRiOTQ4ODctZjYzOC00IiwiY2xpZW50X2lkIjoiZGE0ZjFlZjgtNiJ9.s_fzqiRtT9cam14xKFZw5A3clHVFOWdJi7COdCHLK_8
+        </pre>
           </div>
           <div class="mb-4">
             <h3 class="mb-2">
@@ -76,6 +84,15 @@ curl --location 'http://127.0.0.1:8080/api/app/9db94887-f638-4?id=aac14ec0-0' \
             </div>
             <pre class="mt-4 mb-4">
 curl --location 'http://127.0.0.1:8080/api/app/9db94887-f638-4?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfa2V5IjoiOWRiOTQ4ODctZjYzOC00IiwiY2xpZW50X2lkIjoiZGE0ZjFlZjgtNiJ9.s_fzqiRtT9cam14xKFZw5A3clHVFOWdJi7COdCHLK_8'
+            </pre>
+              <div>
+                  A simple response would be like this, which is the Client credentials:
+              </div>
+              <pre class="mt-4 mb-4">
+{
+    "email": "amirhossein",
+    "password": "1234"
+}
             </pre>
           </div>
         </div>
