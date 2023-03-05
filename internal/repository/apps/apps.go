@@ -2,6 +2,7 @@ package apps
 
 import (
 	"fmt"
+
 	"github.com/amirhnajafiz/authX/internal/model"
 
 	"gorm.io/gorm"

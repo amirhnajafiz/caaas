@@ -45,7 +45,7 @@ func (h *Handler) CheckClient(ctx *fiber.Ctx) error {
 	// get client from database
 	client, err := h.Repository.Clients.Get(clientID)
 	if err != nil {
-		h.Logger.Error("failed to find user", zap.Error(err))
+		h.Logger.Info("failed to find client", zap.Error(err))
 
 		return fiber.ErrNotFound
 	}

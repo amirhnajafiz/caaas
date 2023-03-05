@@ -1,6 +1,8 @@
 package clients
 
 import (
+	"fmt"
+
 	"github.com/amirhnajafiz/authX/internal/model"
 
 	"gorm.io/gorm"
@@ -33,8 +35,12 @@ func (a *clients) Create(client *model.Client) error {
 func (a *clients) Get(clientID string) (*model.Client, error) {
 	client := new(model.Client)
 
-	if err := a.db.Find(&client).Where("client_id = ?", clientID).Error; err != nil {
+	if err := a.db.Where("client_id = ?", clientID).Find(&client).Error; err != nil {
 		return nil, err
+	}
+
+	if client.ID == 0 {
+		return nil, fmt.Errorf("client not found")
 	}
 
 	return client, nil

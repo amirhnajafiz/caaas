@@ -52,6 +52,7 @@ func (h HTTP) main() {
 	}
 
 	app.Post("/api/register", handlerInstance.Register)
+	app.Post("/api/app/:app_key", handlerInstance.CheckClient)
 	app.Put("/api/app/:app_key", handlerInstance.AddClient)
 	app.Get("/api/app/:app_key", handlerInstance.GetClient)
 

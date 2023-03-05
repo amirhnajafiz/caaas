@@ -1,6 +1,8 @@
 package users
 
 import (
+	"fmt"
+
 	"github.com/amirhnajafiz/authX/internal/model"
 
 	"gorm.io/gorm"
@@ -39,7 +41,7 @@ func (u *users) Get(studentNumber string) (*model.User, error) {
 
 	// user not found
 	if user.ID == 0 {
-		return nil, nil
+		return nil, fmt.Errorf("user not found")
 	}
 
 	return user, nil
