@@ -14,6 +14,21 @@ import (
 	"go.uber.org/zap"
 )
 
+// createNewApp function generates a new app.
+func (h *Handler) createNewApp(id uint) (string, error) {
+	app := model.App{
+		AppKey: uuid.NewString()[:15],
+		UserID: id,
+	}
+
+	// save user app into database
+	if err := h.Repository.Apps.Create(&app); err != nil {
+		return "", err
+	}
+
+	return app.AppKey, nil
+}
+
 // CreateApp for a user.
 func (h *Handler) CreateApp(ctx *fiber.Ctx) error {
 	userRequest := new(request.NewApp)
