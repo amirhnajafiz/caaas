@@ -1,6 +1,7 @@
 package apps
 
 import (
+	"fmt"
 	"github.com/amirhnajafiz/authX/internal/model"
 
 	"gorm.io/gorm"
@@ -33,8 +34,13 @@ func (a *apps) Create(app *model.App) error {
 func (a *apps) Get(userID uint) (*model.App, error) {
 	app := new(model.App)
 
-	if err := a.db.Find(&app).Where("user_id = ?", userID).Error; err != nil {
+	if err := a.db.Where("user_id = ?", userID).Find(&app).Error; err != nil {
 		return nil, err
+	}
+
+	// app not found
+	if app.ID == 0 {
+		return nil, fmt.Errorf("app not found")
 	}
 
 	return app, nil
