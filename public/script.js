@@ -20,7 +20,7 @@ function register() {
     })
         .then((response) => response.text())
         .then((data) => {
-            document.getElementById("response").innerText = data
+            document.getElementById("response").value = data
         })
         .catch((error) => {
             console.error(error);
@@ -28,11 +28,9 @@ function register() {
         })
 }
 
+// copy token to clipboard
 function copy() {
-    let text = document.getElementById("response").innerText
+    let text = document.getElementById("response").value
 
-    navigator.clipboard.writeText(text)
-        .catch((error) => {
-            console.log(error)
-        });
+    navigator.clipboard.writeText(text);
 }

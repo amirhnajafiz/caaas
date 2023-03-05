@@ -20,8 +20,8 @@
         </title>
     </head>
     <body>
-        <section class="vh-100" style="background-color: #508bfc;">
-            <div class="container py-5 h-100">
+        <section style="background-color: #508bfc;">
+            <div class="container py-5">
                 <div class="row d-flex justify-content-center align-items-center h-100">
                     <div class="col-12 col-md-8 col-lg-6 col-xl-5">
                         <div class="card shadow-2-strong" style="border-radius: 1rem;">
@@ -46,7 +46,16 @@
                                 >
                                     Register
                                 </button>
-                                <div id="response" class="mt-5"></div>
+                                <div class="mt-5">
+                                    <label class="form-label" for="response">
+                                        API KEY
+                                    </label>
+                                    <input disabled id="response" type="text" class="form-control form-control-sm" />
+                                    <br />
+                                    <button class="btn btn-secondary" onclick="copy()">
+                                        Copy
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
