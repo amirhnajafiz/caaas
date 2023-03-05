@@ -5,7 +5,6 @@ import (
 
 	"github.com/amirhnajafiz/authX/internal/config"
 	"github.com/amirhnajafiz/authX/internal/port/http/handler"
-	"github.com/amirhnajafiz/authX/internal/port/http/middleware"
 	"github.com/amirhnajafiz/authX/internal/repository"
 	"github.com/amirhnajafiz/authX/internal/storage"
 	"github.com/amirhnajafiz/authX/pkg/auth"
@@ -40,6 +39,7 @@ func (h HTTP) main() {
 		return
 	}
 
+	// create a new auth
 	a := auth.New(h.Cfg.Auth)
 
 	// create repository
@@ -50,21 +50,10 @@ func (h HTTP) main() {
 		Logger:     h.Logger.Named("handler"),
 		Repository: r,
 	}
-	middlewareInstance := middleware.Middleware{
-		Auth:       a,
-		Logger:     h.Logger.Named("middleware"),
-		Repository: r,
-	}
 
-	app.Post("/api/login", handlerInstance.Login)
-	app.Put("/api/signup", handlerInstance.Signup)
-
-	v1 := app.Use(middlewareInstance.Authenticate)
-
-	v1.Get("/api/app", handlerInstance.GetUserApps)
-	v1.Put("/api/app", handlerInstance.CreateApp)
-	v1.Get("/api/app/:app_key", handlerInstance.GetSingleApp)
-	v1.Put("/api/app/:app_key/client", handlerInstance.AddClient)
+	app.Post("/api/register", handlerInstance.Register)
+	app.Put("/api/app/:app_key", handlerInstance.AddClient)
+	app.Get("/api/app/:app_key", handlerInstance.GetClient)
 
 	if er := app.Listen(fmt.Sprintf(":%d", h.Cfg.HTTP.Port)); er != nil {
 		h.Logger.Error("start app failed", zap.Error(er))
