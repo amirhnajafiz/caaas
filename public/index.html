@@ -18,48 +18,55 @@
         </title>
     </head>
     <body>
-        <section style="background-color: #508bfc;">
-            <div class="container py-5">
-                <div class="row d-flex justify-content-center align-items-center h-100">
-                    <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-                        <div class="card shadow-2-strong" style="border-radius: 1rem;">
-                            <div class="card-body p-5 text-center">
-                                <h3 class="mb-5">AuthX</h3>
-                                <small>
-                                    Register into AuthX service to get an API KEY in order to use
-                                    the service. If you have already registered before, do it again
-                                    to get your API KEY.
-                                </small>
-                                <div class="form-outline mt-5 mb-4">
-                                    <label class="form-label" for="student-number">Student Number</label>
-                                    <input type="text" id="student-number" placeholder="9831065 ..." class="form-control form-control-lg" />
-                                </div>
-                                <div class="form-outline mb-4">
-                                    <label class="form-label" for="password">Password</label>
-                                    <input type="password" id="password" placeholder="pa$$word" class="form-control form-control-lg" />
-                                </div>
-                                <button
-                                        class="btn btn-primary btn-lg btn-block"
-                                        onclick="register()"
-                                >
-                                    Register
-                                </button>
-                                <div class="mt-5">
-                                    <label class="form-label" for="response">
-                                        API KEY
-                                    </label>
-                                    <input disabled id="response" type="text" class="form-control form-control-sm" />
-                                    <br />
-                                    <button class="btn btn-secondary" onclick="copy()">
-                                        Copy
-                                    </button>
-                                </div>
-                            </div>
+        <div class="container">
+            <div class="m-auto mt-5 pt-5 w-50">
+                <h1 class="mb-4">
+                    AuthX
+                </h1>
+                <div class="mb-2" style="text-align: justify;">
+                    AuthX is a IDaaS (Identity as a Service) which can help you to
+                    authenticate your users by setting any credentials that you desire.
+                    For using this service, register with your student number and password
+                    to get an
+                    <span style="background: #b9b9b9; color: #ff4747; padding: 0 5px;">API KEY</span>
+                    in order to use the service APIs.
+                </div>
+                <div class="mt-5 p-5 border rounded">
+                    <div class="row mb-3">
+                        <label class="col" for="student-number">
+                            Student Number
+                        </label>
+                        <div class="col-6">
+                            <input class="form-control" type="text" id="student-number" placeholder="9831065" />
                         </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col" for="password">
+                            Password
+                        </label>
+                        <div class="col-6">
+                            <input class="form-control" type="text" id="password" placeholder="pa$$word" />
+                        </div>
+                    </div>
+                    <div class="mt-5 pt-2" style="text-align: center;">
+                        <button
+                            type="button"
+                            onclick="register()"
+                            class="btn btn-primary"
+                        >
+                            Register
+                        </button>
+                        <button
+                            type="button"
+                            onclick="register()"
+                            class="btn btn-danger"
+                        >
+                            Clear
+                        </button>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
         <script src="script.js"></script>
     </body>
 </html>
