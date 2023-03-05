@@ -6,40 +6,34 @@ import (
 	"gorm.io/gorm"
 )
 
+// Clients manages the client model.
 type Clients interface {
 	Create(client *model.Client) error
-	GetAppClients(id uint) ([]*model.Client, error)
-	GetSingle(id uint) (*model.Client, error)
+	GetSingle(clientID string) (*model.Client, error)
 }
 
+// New generates a new client repository.
 func New(db *gorm.DB) Clients {
 	return &clients{
 		db: db,
 	}
 }
 
+// clients manages the functions of repository.
 type clients struct {
 	db *gorm.DB
 }
 
+// Create a new client.
 func (a *clients) Create(client *model.Client) error {
 	return a.db.Create(client).Error
 }
 
-func (a *clients) GetAppClients(id uint) ([]*model.Client, error) {
-	var list []*model.Client
-
-	if err := a.db.Find(&list).Where("app_id = ?", id).Error; err != nil {
-		return nil, err
-	}
-
-	return list, nil
-}
-
-func (a *clients) GetSingle(id uint) (*model.Client, error) {
+// GetSingle client.
+func (a *clients) GetSingle(clientID string) (*model.Client, error) {
 	client := new(model.Client)
 
-	if err := a.db.First(&client, id).Error; err != nil {
+	if err := a.db.First(&client).Where("client_id = ?", clientID).Error; err != nil {
 		return nil, err
 	}
 
