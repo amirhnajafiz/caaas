@@ -28,9 +28,23 @@ function register() {
         })
 }
 
+// clear function
+function clear() {
+    document.getElementById("student-number").value = "";
+    document.getElementById("student-number").innerText = "";
+    document.getElementById("password").value = "";
+    document.getElementById("password").innerText = "";
+    document.getElementById("response").value = "";
+    document.getElementById("response").innerText = "";
+}
+
 // copy token to clipboard
 function copy() {
     let text = document.getElementById("response").value
+
+    if (text === "") {
+        return
+    }
 
     navigator.clipboard.writeText(text);
 
