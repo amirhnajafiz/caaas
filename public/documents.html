@@ -43,20 +43,20 @@
               You will get an ID in return. This ID is the client ID which will be
               needed for user Login.
             </div>
-            <pre class="mt-4 mb-4">
+            <pre class="mt-4 mb-4"><code>
 curl --location --request PUT 'http://127.0.0.1:8080/api/app/{API_KEY}' \
   --header 'Content-Type: application/json' \
   --data '{
       "email": "amirhossein",
       "password": "1234"
   }'
-            </pre>
+            </code></pre>
             <div>
               A simple response would be like this, which is the Client ID:
             </div>
-            <pre class="mt-4 mb-4">
+            <pre class="mt-4 mb-4"><code>
 aac14ec0-8
-            </pre>
+            </code></pre>
           </div>
           <div class="mb-4 pb-4 border-bottom">
             <h3 class="mb-2">
@@ -67,16 +67,16 @@ aac14ec0-8
               client exists, you will get a token for getting that client with
               that token.
             </div>
-            <pre class="mt-4 mb-4">
+            <pre class="mt-4 mb-4"><code>
 curl --location --request POST 'http://127.0.0.1:8080/api/app/9db94887-f638-4?id=aac14ec0-0' \
   --header 'Content-Type: application/json'
-            </pre>
+            </code></pre>
           <div>
               A simple response would be like this, which is the Token for getting user:
           </div>
-          <pre class="mt-4 mb-4">
+          <pre class="mt-4 mb-4"><code>
 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfa2V5IjoiOWRiOTQ4ODctZjYzOC00IiwiY2xpZW50X2lkIjoiZGE0ZjFlZjgtNiJ9.s_fzqiRtT9cam14xKFZw5A3clHVFOWdJi7COdCHLK_8
-        </pre>
+          </code></pre>
           </div>
           <div class="mb-4">
             <h3 class="mb-2">
@@ -86,23 +86,26 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfa2V5IjoiOWRiOTQ4ODctZjYzOC00IiwiY2x
               Get the client credentials by sending a get request with the token
               that you got from check API.
             </div>
-            <pre class="mt-4 mb-4">
+            <pre class="mt-4 mb-4"><code>
 curl --location 'http://127.0.0.1:8080/api/app/9db94887-f638-4?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfa2V5IjoiOWRiOTQ4ODctZjYzOC00IiwiY2xpZW50X2lkIjoiZGE0ZjFlZjgtNiJ9.s_fzqiRtT9cam14xKFZw5A3clHVFOWdJi7COdCHLK_8'
+            </code>
             </pre>
               <div>
                   A simple response would be like this, which is the Client credentials:
               </div>
-              <pre class="mt-4 mb-4">
+              <pre class="mt-4 mb-4"><code>
 {
     "email": "amirhossein",
     "password": "1234"
 }
-            </pre>
+                  </code>
+              </pre>
           </div>
         </div>
       </div>
     </div>
     <script src="script.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
   </body>
 </html>
