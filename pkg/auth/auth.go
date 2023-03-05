@@ -25,13 +25,14 @@ func New(cfg Config) *Auth {
 }
 
 // GenerateJWT creates a new JWT token.
-func (a *Auth) GenerateJWT(email string) (string, error) {
+func (a *Auth) GenerateJWT(appKey, clientID string) (string, error) {
 	// create a new token
 	token := jwt.New(jwt.SigningMethodHS256)
 
 	// create claims
 	claims := token.Claims.(jwt.MapClaims)
-	claims["email"] = email
+	claims["client_id"] = clientID
+	claims["app_key"] = appKey
 
 	// generate token string
 	tokenString, err := token.SignedString([]byte(a.key))
@@ -43,7 +44,7 @@ func (a *Auth) GenerateJWT(email string) (string, error) {
 }
 
 // ParseJWT gets a token string and extracts the data.
-func (a *Auth) ParseJWT(tokenString string) (string, error) {
+func (a *Auth) ParseJWT(tokenString string) (string, string, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return "", errSigningMethod
@@ -52,15 +53,16 @@ func (a *Auth) ParseJWT(tokenString string) (string, error) {
 		return []byte(a.key), nil
 	})
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 
 	// taking out claims
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		email := claims["email"].(string)
+		id := claims["client_id"].(string)
+		key := claims["app_key"].(string)
 
-		return email, nil
+		return id, key, nil
 	}
 
-	return "", errInvalidToken
+	return "", "", errInvalidToken
 }
