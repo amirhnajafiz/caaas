@@ -25,7 +25,7 @@ func New(cfg Config) *Auth {
 }
 
 // GenerateJWT creates a new JWT token.
-func (a *Auth) GenerateJWT(appKey, clientID string) (string, error) {
+func (a *Auth) GenerateJWT(clientID, appKey string) (string, error) {
 	// create a new token
 	token := jwt.New(jwt.SigningMethodHS256)
 
