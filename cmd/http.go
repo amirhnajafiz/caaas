@@ -59,6 +59,6 @@ func (h HTTP) main() {
 	app.Get("/api/app/:app_key", handlerInstance.GetClient)
 
 	if er := app.Listen(fmt.Sprintf(":%d", h.Cfg.HTTP.Port)); er != nil {
-		h.Logger.Error("start app failed", zap.Error(er))
+		h.Logger.Error("failed to start app", zap.Error(er))
 	}
 }

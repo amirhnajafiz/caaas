@@ -39,4 +39,6 @@ func (m Migrate) main() {
 	); er != nil {
 		m.Logger.Error("migration failed", zap.Error(er))
 	}
+
+	m.Logger.Info("migration completed")
 }
