@@ -29,13 +29,10 @@ function register() {
 }
 
 // clear function
-function clear() {
-    document.getElementById("student-number").value = "";
-    document.getElementById("student-number").innerText = "";
-    document.getElementById("password").value = "";
-    document.getElementById("password").innerText = "";
-    document.getElementById("response").value = "";
-    document.getElementById("response").innerText = "";
+function resetForm() {
+    document.getElementById("student-number").value = '';
+    document.getElementById("password").value = '';
+    document.getElementById("response").value = '';
 }
 
 // copy token to clipboard
