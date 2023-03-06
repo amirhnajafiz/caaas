@@ -29,7 +29,7 @@ function register() {
 }
 
 // clear function
-function resetForm() {
+function clear_form_data() {
     document.getElementById("student-number").value = '';
     document.getElementById("password").value = '';
     document.getElementById("response").value = '';
