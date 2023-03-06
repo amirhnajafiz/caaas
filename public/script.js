@@ -6,7 +6,7 @@ function register() {
     let stEl = document.getElementById("student-number");
     let psEl = document.getElementById("password");
 
-    if (!valid(stEl.value, psEl.value)) {
+    if (!check_validation(stEl.value, psEl.value)) {
         alert("Invalid inputs!");
 
         return
@@ -55,12 +55,12 @@ function copy() {
 }
 
 // validate user inputs
-function valid(studentNumber, password) {
+function check_validation(studentNumber, password) {
     if (studentNumber === "" || password === "") {
         return false;
     }
 
-    if (studentNumber.search("([0-9]{7}$)\\w+") === -1) {
+    if (studentNumber.search("\\d{7}") === -1) {
         return false;
     }
 
