@@ -24,20 +24,14 @@ func (h *Handler) Register(ctx *fiber.Ctx) error {
 
 	// check if user exists or not
 	if user, err := h.Repository.Users.Get(userRequest.StudentNumber); user != nil {
-		h.Logger.Info("user exists", zap.String("student number", userRequest.StudentNumber))
-
 		// check user password
 		if userRequest.Password != user.Password {
-			h.Logger.Info("wrong password")
-
 			return fiber.ErrUnauthorized
 		}
 
 		// get user app
 		app, er := h.Repository.Apps.Get(user.ID)
 		if er != nil {
-			h.Logger.Info("recreating a new app for user")
-
 			// creating a new app for user
 			key, e := h.createNewApp(user.ID)
 			if e != nil {
