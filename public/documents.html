@@ -51,12 +51,27 @@ curl --location --request PUT 'http://127.0.0.1:8080/api/app/{API_KEY}' \
       "password": "1234"
   }'
             </code></pre>
+              <div>
+                  Your input data can be any credential that you want to store
+                  for each client. It should be in JSON format.
+              </div>
+              <pre class="mt-4 mb-4">
+                  <code>
+                      {
+                        "email": "something@gmail.com",
+                        "username": "someone"
+                      }
+                  </code>
+              </pre>
             <div>
               A simple response would be like this, which is the Client ID:
             </div>
             <pre class="mt-4 mb-4"><code>
 aac14ec0-8
             </code></pre>
+              <div>
+                  This client ID is what you send to your users to use for login.
+              </div>
           </div>
           <div class="mb-4 pb-4 border-bottom">
             <h3 class="mb-2">
@@ -68,14 +83,17 @@ aac14ec0-8
               that token.
             </div>
             <pre class="mt-4 mb-4"><code>
-curl --location --request POST 'http://127.0.0.1:8080/api/app/9db94887-f638-4?id=aac14ec0-0' \
+curl --location --request POST 'http://127.0.0.1:8080/api/app/{API_KEY}?id=aac14ec0-0' \
   --header 'Content-Type: application/json'
             </code></pre>
+              <div class="mb-4">
+                  Remember to put client ID as a query param in url.
+              </div>
           <div>
               A simple response would be like this, which is the Token for getting user:
           </div>
           <pre class="mt-4 mb-4"><code>
-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfa2V5IjoiOWRiOTQ4ODctZjYzOC00IiwiY2xpZW50X2lkIjoiZGE0ZjFlZjgtNiJ9.s_fzqiRtT9cam14xKFZw5A3clHVFOWdJi7COdCHLK_8
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJV5IjoiOWRiOTQ4ODctZjYzOpZW50X2lkIjoiZGE0ZiJ9.s_fzqiRtT9cam14xKFZw5A3clHVFOWdJi7COdCHLK_8
           </code></pre>
           </div>
           <div class="mb-4">
@@ -87,9 +105,12 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfa2V5IjoiOWRiOTQ4ODctZjYzOC00IiwiY2x
               that you got from check API.
             </div>
             <pre class="mt-4 mb-4"><code>
-curl --location 'http://127.0.0.1:8080/api/app/9db94887-f638-4?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfa2V5IjoiOWRiOTQ4ODctZjYzOC00IiwiY2xpZW50X2lkIjoiZGE0ZjFlZjgtNiJ9.s_fzqiRtT9cam14xKFZw5A3clHVFOWdJi7COdCHLK_8'
+curl --location 'http://127.0.0.1:8080/api/app/{API_KEY}?token=eyJhbGciOiJIUzR5cCRiOTQ4ODctZjYzOC002lkIjoiZGE0ZjFlZjgtNiJ9.s_fzqiRtT9cam14xKFZw5A3clHVFOWdJi7COdCHLK_8'
             </code>
             </pre>
+              <div class="mb-4">
+                  Remember to send the user token as a query param in url.
+              </div>
               <div>
                   A simple response would be like this, which is the Client credentials:
               </div>
