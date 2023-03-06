@@ -44,7 +44,7 @@
               needed for user Login.
             </div>
             <pre class="mt-4 mb-4"><code>
-curl --location --request PUT 'http://127.0.0.1:8080/api/app/{API_KEY}' \
+curl --location --request PUT 'http://www.authx.ir/api/app/{API_KEY}' \
   --header 'Content-Type: application/json' \
   --data '{
       "email": "amirhossein",
@@ -55,12 +55,11 @@ curl --location --request PUT 'http://127.0.0.1:8080/api/app/{API_KEY}' \
                   Your input data can be any credential that you want to store
                   for each client. It should be in JSON format.
               </div>
-              <pre class="mt-4 mb-4">
-                  <code>
-                      {
-                        "email": "something@gmail.com",
-                        "username": "someone"
-                      }
+              <pre class="mt-4 mb-4"><code>
+{
+    "email": "something@gmail.com",
+    "username": "someone"
+}
                   </code>
               </pre>
             <div>
@@ -83,7 +82,7 @@ aac14ec0-8
               that token.
             </div>
             <pre class="mt-4 mb-4"><code>
-curl --location --request POST 'http://127.0.0.1:8080/api/app/{API_KEY}?id=aac14ec0-0' \
+curl --location --request POST 'http://www.authx.ir/api/app/{API_KEY}?id=aac14ec0-0' \
   --header 'Content-Type: application/json'
             </code></pre>
               <div class="mb-4">
@@ -105,7 +104,7 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJV5IjoiOWRiOTQ4ODctZjYzOpZW50X2lkIjoiZGE0
               that you got from check API.
             </div>
             <pre class="mt-4 mb-4"><code>
-curl --location 'http://127.0.0.1:8080/api/app/{API_KEY}?token=eyJhbGciOiJIUzR5cCRiOTQ4ODctZjYzOC002lkIjoiZGE0ZjFlZjgtNiJ9.s_fzqiRtT9cam14xKFZw5A3clHVFOWdJi7COdCHLK_8'
+curl --location 'http://www.authx.ir/api/app/{API_KEY}?token=eyJhbGciOiJIUzR5cCRiOTQ4ODctZjYzOC002lkIjoiZGE0ZjFlZjgtNiJ9.s_fzqiRtT9cam14xKFZw5A3clHVFOWdJi7COdCHLK_8'
             </code>
             </pre>
               <div class="mb-4">
