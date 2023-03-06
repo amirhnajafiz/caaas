@@ -40,7 +40,7 @@ func (u *users) Get(studentNumber string) (*model.User, error) {
 	}
 
 	// user not found
-	if user.ID == 0 {
+	if user.StudentNumber != studentNumber {
 		return nil, fmt.Errorf("user not found")
 	}
 

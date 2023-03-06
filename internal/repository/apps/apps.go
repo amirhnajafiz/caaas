@@ -40,7 +40,7 @@ func (a *apps) Get(userID uint) (*model.App, error) {
 	}
 
 	// app not found
-	if app.ID == 0 {
+	if app.UserID != userID {
 		return nil, fmt.Errorf("app not found")
 	}
 

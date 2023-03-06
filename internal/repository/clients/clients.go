@@ -39,7 +39,7 @@ func (a *clients) Get(clientID string) (*model.Client, error) {
 		return nil, err
 	}
 
-	if client.ID == 0 {
+	if client.ClientID != clientID {
 		return nil, fmt.Errorf("client not found")
 	}
 
