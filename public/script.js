@@ -6,6 +6,12 @@ function register() {
     let stEl = document.getElementById("student-number");
     let psEl = document.getElementById("password");
 
+    if (!valid(stEl.value, psEl.value)) {
+        alert("Invalid inputs!");
+
+        return
+    }
+
     let data = {
         "student_number": stEl.value,
         "password": psEl.value
@@ -46,4 +52,17 @@ function copy() {
     navigator.clipboard.writeText(text);
 
     alert("API Key copied to clipboard!");
+}
+
+// validate user inputs
+function valid(studentNumber, password) {
+    if (studentNumber === "" || password === "") {
+        return false;
+    }
+
+    if (studentNumber.search("([0-9]{7}$)\\w+") === -1) {
+        return false;
+    }
+
+    return password.length >= 3;
 }
