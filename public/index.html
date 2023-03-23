@@ -23,61 +23,20 @@
                 <h1 class="mb-5">
                     AuthX
                 </h1>
-                <div class="mb-4" style="text-align: justify;">
+                <div class="mb-5" style="text-align: justify;">
                     AuthX is a IDaaS (Identity as a Service) which can help you to
                     authenticate your users by setting any credentials that you desire.
                     For using this service, register with your student number and password
                     to get an
                     <span style="background: #b9b9b9; color: #ff4747; padding: 0 5px;">API KEY</span>
-                    in order to use the service APIs.<br />
+                    in order to use the service APIs.
+                    With this API you can authenticate your clients for free.
+                    <br /><br /><br />
                     Read the <a href="documents.html">documents</a> for more information about
-                    how to use AuthX APIs.
+                    how to use AuthX APIs.<br />
+                    You can register from <a href="register.html">Here</a>.
                 </div>
-                <div class="mt-5 p-5 border rounded">
-                    <div class="row mb-3">
-                        <label class="col" for="student-number">
-                            Student Number (CEIT format)
-                        </label>
-                        <div class="col-6">
-                            <input class="form-control" type="text" id="student-number" placeholder="9831065" />
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <label class="col" for="password">
-                            Password (more than 3)
-                        </label>
-                        <div class="col-6">
-                            <input class="form-control" type="password" id="password" placeholder="pa$$word" />
-                        </div>
-                    </div>
-                    <div class="mt-5 pt-4" style="text-align: center;">
-                        <button
-                            type="button"
-                            onclick="register()"
-                            class="btn btn-primary"
-                        >
-                            Register
-                        </button>
-                        <button
-                            type="button"
-                            onclick="clear_form_data()"
-                            class="btn btn-danger"
-                        >
-                            Clear
-                        </button>
-                    </div>
-                </div>
-                <div class="mt-5 mb-5 pt-3 pb-5">
-                    <div class="row mt-3">
-                        <div class="col-10">
-                            <input class="form-control" type="text" id="response" disabled />
-                        </div>
-                        <button onclick="copy()" class="col btn btn-secondary">
-                            Copy
-                        </button>
-                    </div>
-                </div>
-                <div class="mt-5 pt-2 pb-3 mb-3 border-top text-muted fs-6">
+                <div class="mt-5 pt-2 pb-3 mb-3 border-top text-muted fs-6" style="margin-top: 150px !important;">
                     <small>
                         This service is created for students in the Amirkabir University of Tehran, Iran
                         <br />
@@ -90,6 +49,5 @@
                 </div>
             </div>
         </div>
-        <script src="script.js"></script>
     </body>
 </html>
