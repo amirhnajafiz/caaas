@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/gofiber/template/html"
 
 	"github.com/amirhnajafiz/authX/internal/config"
 	"github.com/amirhnajafiz/authX/internal/port/http/handler"
@@ -28,8 +29,13 @@ func (h HTTP) Command() *cobra.Command {
 
 // main function of HTTP command.
 func (h HTTP) main() {
+	// initialize standard Go html template engine
+	engine := html.New("./views", ".html")
+
 	// create a new fiber app
-	app := fiber.New()
+	app := fiber.New(fiber.Config{
+		Views: engine,
+	})
 
 	// open db connection
 	db, err := storage.NewConnection(h.Cfg.Storage)
