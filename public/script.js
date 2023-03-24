@@ -49,9 +49,9 @@ function copy() {
         return
     }
 
-    navigator.clipboard.writeText(text);
-
-    alert("API Key copied to clipboard!");
+    navigator.clipboard.writeText(text).then(_ => {
+        console.log("copy")
+    });
 }
 
 // validate user inputs
