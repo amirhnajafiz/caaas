@@ -2,15 +2,16 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/gofiber/template/html"
 
 	"github.com/amirhnajafiz/authX/internal/config"
 	"github.com/amirhnajafiz/authX/internal/port/http/handler"
+	"github.com/amirhnajafiz/authX/internal/port/http/view"
 	"github.com/amirhnajafiz/authX/internal/repository"
 	"github.com/amirhnajafiz/authX/internal/storage"
 	"github.com/amirhnajafiz/authX/pkg/auth"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/template/html"
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
 )
@@ -57,11 +58,13 @@ func (h HTTP) main() {
 		Repository: r,
 	}
 
+	viewInstance := view.View{}
+
 	app.Static("/", "./public")
 
-	app.Get("/", handlerInstance.HomeView)
-	app.Get("/docs", handlerInstance.DocsView)
-	app.Get("/register", handlerInstance.RegisterView)
+	app.Get("/", viewInstance.Home)
+	app.Get("/docs", viewInstance.Docs)
+	app.Get("/register", viewInstance.Register)
 
 	app.Post("/api/register", handlerInstance.Register)
 	app.Post("/api/app/:app_key", handlerInstance.CheckClient)
