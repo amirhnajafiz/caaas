@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Terminating" $2;
+echo "Terminating" "$2";
 echo "Release" $1;
 
 sudo docker stop authx-container;
