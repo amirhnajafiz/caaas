@@ -59,6 +59,16 @@ func (h HTTP) main() {
 
 	app.Static("/", "./public")
 
+	app.Get("/", func(ctx *fiber.Ctx) error {
+		return ctx.Render("index", nil)
+	})
+	app.Get("/docs", func(ctx *fiber.Ctx) error {
+		return ctx.Render("documents", nil)
+	})
+	app.Get("/register", func(ctx *fiber.Ctx) error {
+		return ctx.Render("register", nil)
+	})
+
 	app.Post("/api/register", handlerInstance.Register)
 	app.Post("/api/app/:app_key", handlerInstance.CheckClient)
 	app.Put("/api/app/:app_key", handlerInstance.AddClient)
