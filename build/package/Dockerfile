@@ -3,7 +3,7 @@ FROM golang:1.19-alpine
 
 # labels for swarm and other managers
 LABEL app="authx"
-LABEL docker_file_version="v0.1.0"
+LABEL docker_file_version="v0.1.1"
 LABEL database_driver="mysql"
 
 # maintainer
@@ -17,8 +17,9 @@ ENV APP="authx"
 COPY . .
 
 # building go executable file
-RUN go build -o main
-RUN chmod +x ./main
+RUN go build -o main \
+    && chmod +x ./main
+
 # migrate database
 RUN ./main migrate
 
