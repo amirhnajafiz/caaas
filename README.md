@@ -1,8 +1,4 @@
-<h1 align="center">
-  AuthX
-</h1>
-
-<br />
+# AuthX
 
 <div align="center">
   <img src="https://img.shields.io/github/languages/top/amirhnajafiz/authx?style=for-the-badge" />
