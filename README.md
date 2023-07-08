@@ -47,3 +47,5 @@ docker run -d \
   -v type=bind,source=$(pwd)/config.yml,dest=/config.yml \
   authx:v0.1.0
 ```
+
+After setting up the application, visit ```localhost```.
