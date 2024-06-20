@@ -1,7 +1,6 @@
 package config
 
 import (
-	"github.com/amirhnajafiz/authX/internal/port/http"
 	"github.com/amirhnajafiz/authX/internal/storage"
 	"github.com/amirhnajafiz/authX/pkg/auth"
 	"github.com/amirhnajafiz/authX/pkg/logger"
@@ -16,9 +15,6 @@ func Default() Config {
 		Logger: logger.Config{
 			Level:  "debug",
 			Enable: false,
-		},
-		HTTP: http.Config{
-			Port: 8080,
 		},
 		Storage: storage.Config{
 			Port:     3306,
