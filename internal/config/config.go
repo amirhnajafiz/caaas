@@ -22,6 +22,7 @@ const (
 
 // Config stores the application parameters.
 type Config struct {
+	Mode    string         `koanf:"mode"`
 	Auth    jwt.Config     `koanf:"auth"`
 	Logger  logger.Config  `koanf:"logger"`
 	Storage storage.Config `koanf:"storage"`

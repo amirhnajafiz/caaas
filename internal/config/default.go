@@ -2,12 +2,14 @@ package config
 
 import (
 	"github.com/amirhnajafiz/caaas/internal/storage"
+	"github.com/amirhnajafiz/caaas/pkg/enum"
 	"github.com/amirhnajafiz/caaas/pkg/jwt"
 	"github.com/amirhnajafiz/caaas/pkg/logger"
 )
 
 func Default() Config {
 	return Config{
+		Mode: enum.ModeGW,
 		Auth: jwt.Config{
 			PrivateKey:       "secret",
 			TokensExpireTime: 30, // in miutes
