@@ -8,6 +8,7 @@ import (
 	"github.com/amirhnajafiz/caaas/internal/handlers/gateway"
 	"github.com/amirhnajafiz/caaas/internal/handlers/migrate"
 	"github.com/amirhnajafiz/caaas/internal/monitoring/logger"
+	"github.com/amirhnajafiz/caaas/internal/monitoring/metrics"
 	"github.com/amirhnajafiz/caaas/pkg/jwt"
 
 	"github.com/go-pg/pg/v10"
@@ -17,6 +18,7 @@ import (
 // loader is a struct that holds import components of our handlers.
 type loader struct {
 	cfg      config.Config
+	metrics  *metrics.Metrics
 	auth     *jwt.Auth
 	logger   *zap.Logger
 	ctl      *controller.Controller
@@ -31,6 +33,12 @@ func (l *loader) bootstrap() {
 	l.logger = logger.NewLogger(l.cfg.Logger)
 	// create a new auth system
 	l.auth = jwt.New(l.cfg.Auth)
+	// create metrics instance
+	l.metrics = metrics.NewMetrics()
+	// create metrics server if enable
+	if l.cfg.Metrics.Enable {
+		metrics.StartServer(l.cfg.Metrics.Port)
+	}
 }
 
 // LoadHandler returns a handler based on the mode which is set in configs.

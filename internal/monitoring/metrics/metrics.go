@@ -7,6 +7,10 @@ type Metrics struct {
 	latency     map[string]float64 // label for each endpoint
 }
 
+func NewMetrics() *Metrics {
+	return &Metrics{}
+}
+
 func (m *Metrics) AddRequest(endpoint string) {}
 
 func (m *Metrics) AddFailedCall(endpoint string) {}
