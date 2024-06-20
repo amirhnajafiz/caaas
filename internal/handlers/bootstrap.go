@@ -3,6 +3,8 @@ package handlers
 import (
 	"github.com/amirhnajafiz/caaas/internal/config"
 	"github.com/amirhnajafiz/caaas/internal/controller"
+	"github.com/amirhnajafiz/caaas/internal/handlers/api"
+	"github.com/amirhnajafiz/caaas/internal/handlers/gateway"
 	"github.com/amirhnajafiz/caaas/internal/handlers/migrate"
 	"github.com/amirhnajafiz/caaas/pkg/enum"
 	"github.com/amirhnajafiz/caaas/pkg/jwt"
@@ -43,9 +45,16 @@ func LoadHandler(cfg config.Config, db *pg.DB) Handler {
 	// handler selector
 	switch cfg.Mode {
 	case enum.ModeAPI:
-		return nil
+		return &api.Handler{
+			Logger: l.logger.Named("api"),
+			Ctl:    l.ctl,
+		}
 	case enum.ModeGW:
-		return nil
+		return &gateway.Handler{
+			Logger: l.logger.Named("gateway"),
+			Ctl:    l.ctl,
+			Auth:   l.auth,
+		}
 	case enum.ModeMigrate:
 		return &migrate.Handler{
 			Database: l.database,
