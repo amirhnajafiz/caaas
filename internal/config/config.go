@@ -2,6 +2,7 @@ package config
 
 import (
 	"log"
+	"strings"
 
 	"github.com/amirhnajafiz/caaas/internal/storage"
 	"github.com/amirhnajafiz/caaas/pkg/jwt"
@@ -9,8 +10,14 @@ import (
 
 	"github.com/knadh/koanf"
 	"github.com/knadh/koanf/parsers/yaml"
+	"github.com/knadh/koanf/providers/env"
 	"github.com/knadh/koanf/providers/file"
 	"github.com/knadh/koanf/providers/structs"
+)
+
+const (
+	// Prefix indicates environment variables prefix.
+	Prefix = "CAAAS_"
 )
 
 // Config stores the application parameters.
@@ -34,6 +41,14 @@ func LoadConfigs() Config {
 	// load configs file
 	if err := k.Load(file.Provider("config.yaml"), yaml.Parser()); err != nil {
 		log.Printf("error loading config.yaml file: %v\n", err)
+	}
+
+	// load environment variables
+	if err := k.Load(env.Provider(Prefix, ".", func(s string) string {
+		return strings.ReplaceAll(strings.ToLower(
+			strings.TrimPrefix(s, Prefix)), "__", ".")
+	}), nil); err != nil {
+		log.Printf("error loading environment variables: %s", err)
 	}
 
 	// unmarshalling
