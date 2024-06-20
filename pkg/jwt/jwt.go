@@ -28,13 +28,13 @@ func New(cfg Config) *Auth {
 }
 
 // GenerateJWT creates a new JWT token.
-func (a *Auth) GenerateJWT(id int, username string) (string, error) {
+func (a *Auth) GenerateJWT(username string) (string, error) {
 	// create a new token
 	token := jwt.New(jwt.SigningMethodHS256)
 
 	// create claims
 	claims := token.Claims.(jwt.MapClaims)
-	claims["id"] = id
+
 	claims["username"] = username
 	claims["exp"] = time.Now().Add(time.Minute * time.Duration(a.expire)).Unix()
 	claims["authorized"] = true
