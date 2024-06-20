@@ -2,9 +2,9 @@ package config
 
 import (
 	"github.com/amirhnajafiz/caaas/internal/enum"
+	"github.com/amirhnajafiz/caaas/internal/monitoring/logger"
 	"github.com/amirhnajafiz/caaas/internal/storage"
 	"github.com/amirhnajafiz/caaas/pkg/jwt"
-	"github.com/amirhnajafiz/caaas/pkg/logger"
 )
 
 func Default() Config {

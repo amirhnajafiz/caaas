@@ -4,9 +4,9 @@ import (
 	"log"
 	"strings"
 
+	"github.com/amirhnajafiz/caaas/internal/monitoring/logger"
 	"github.com/amirhnajafiz/caaas/internal/storage"
 	"github.com/amirhnajafiz/caaas/pkg/jwt"
-	"github.com/amirhnajafiz/caaas/pkg/logger"
 
 	"github.com/knadh/koanf"
 	"github.com/knadh/koanf/parsers/yaml"

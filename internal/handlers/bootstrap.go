@@ -7,8 +7,8 @@ import (
 	"github.com/amirhnajafiz/caaas/internal/handlers/api"
 	"github.com/amirhnajafiz/caaas/internal/handlers/gateway"
 	"github.com/amirhnajafiz/caaas/internal/handlers/migrate"
+	"github.com/amirhnajafiz/caaas/internal/monitoring/logger"
 	"github.com/amirhnajafiz/caaas/pkg/jwt"
-	"github.com/amirhnajafiz/caaas/pkg/logger"
 
 	"github.com/go-pg/pg/v10"
 	"go.uber.org/zap"
