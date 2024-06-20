@@ -25,17 +25,15 @@ func NewLogger(cfg Config) *zap.Logger {
 		defaultCore,
 	}
 
-	if cfg.Enable {
-		p := getPriorityFromLevel(lvl.String()) | syslog.LOG_LOCAL0
-		encoder := zapcore.NewJSONEncoder(zap.NewProductionEncoderConfig())
+	p := getPriorityFromLevel(lvl.String()) | syslog.LOG_LOCAL0
+	jsonEncoder := zapcore.NewJSONEncoder(zap.NewProductionEncoderConfig())
 
-		writer, err := syslog.Dial("", "", p, "")
-		if err == nil {
-			cores = append(cores, zapsyslog.NewCore(lvl, encoder, writer))
-		} else {
-			log.Printf("cannot create syslog core, error: %s", err.Error())
-			log.Println("warning, logger output is only stdout")
-		}
+	writer, err := syslog.Dial("", "", p, "")
+	if err == nil {
+		cores = append(cores, zapsyslog.NewCore(lvl, jsonEncoder, writer))
+	} else {
+		log.Printf("cannot create syslog core, error: %s", err.Error())
+		log.Println("warning, logger output is only stdout")
 	}
 
 	core := zapcore.NewTee(cores...)
@@ -58,7 +56,6 @@ func getPriorityFromLevel(level string) syslog.Priority {
 		return syslog.LOG_CRIT
 	case "panic":
 		return syslog.LOG_ALERT
-
 	default:
 		return syslog.LOG_ERR
 	}

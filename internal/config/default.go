@@ -13,8 +13,7 @@ func Default() Config {
 			ExpireTime: 5,
 		},
 		Logger: logger.Config{
-			Level:  "debug",
-			Enable: false,
+			Level: "debug",
 		},
 		Storage: storage.Config{
 			Port:     3306,

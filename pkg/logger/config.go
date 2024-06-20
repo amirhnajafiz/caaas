@@ -1,7 +1,6 @@
 package logger
 
-// Config parameters for logger.
+// Config parameters for zap logger.
 type Config struct {
-	Level  string `koanf:"level"`
-	Enable bool   `koanf:"enable"`
+	Level string `koanf:"level"`
 }
