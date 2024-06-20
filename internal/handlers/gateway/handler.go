@@ -13,6 +13,7 @@ type Handler struct {
 	Logger *zap.Logger
 	Ctl    *controller.Controller
 	Auth   *jwt.Auth
+	Port   int
 }
 
 func (h Handler) Execute() error {
