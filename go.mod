@@ -1,4 +1,4 @@
-module github.com/amirhnajafiz/authX
+module github.com/amirhnajafiz/caaas
 
 go 1.22
 

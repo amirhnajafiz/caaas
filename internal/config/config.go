@@ -3,9 +3,9 @@ package config
 import (
 	"log"
 
-	"github.com/amirhnajafiz/authX/internal/storage"
-	"github.com/amirhnajafiz/authX/pkg/auth"
-	"github.com/amirhnajafiz/authX/pkg/logger"
+	"github.com/amirhnajafiz/caaas/internal/storage"
+	"github.com/amirhnajafiz/caaas/pkg/auth"
+	"github.com/amirhnajafiz/caaas/pkg/logger"
 
 	"github.com/knadh/koanf"
 	"github.com/knadh/koanf/parsers/yaml"
