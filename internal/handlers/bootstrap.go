@@ -3,10 +3,10 @@ package handlers
 import (
 	"github.com/amirhnajafiz/caaas/internal/config"
 	"github.com/amirhnajafiz/caaas/internal/controller"
+	"github.com/amirhnajafiz/caaas/internal/enum"
 	"github.com/amirhnajafiz/caaas/internal/handlers/api"
 	"github.com/amirhnajafiz/caaas/internal/handlers/gateway"
 	"github.com/amirhnajafiz/caaas/internal/handlers/migrate"
-	"github.com/amirhnajafiz/caaas/pkg/enum"
 	"github.com/amirhnajafiz/caaas/pkg/jwt"
 	"github.com/amirhnajafiz/caaas/pkg/logger"
 
