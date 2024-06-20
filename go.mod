@@ -1,6 +1,6 @@
 module github.com/amirhnajafiz/authX
 
-go 1.19
+go 1.22
 
 require (
 	github.com/gofiber/fiber/v2 v2.42.0
