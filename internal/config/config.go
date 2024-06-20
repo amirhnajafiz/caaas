@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/amirhnajafiz/caaas/internal/monitoring/logger"
+	"github.com/amirhnajafiz/caaas/internal/monitoring/metrics"
 	"github.com/amirhnajafiz/caaas/internal/storage"
 	"github.com/amirhnajafiz/caaas/pkg/jwt"
 
@@ -22,10 +23,12 @@ const (
 
 // Config stores the application parameters.
 type Config struct {
-	Mode    string         `koanf:"mode"`
-	Auth    jwt.Config     `koanf:"auth"`
-	Logger  logger.Config  `koanf:"logger"`
-	Storage storage.Config `koanf:"storage"`
+	Mode           string         `koanf:"mode"`
+	HTTPServerPort int            `koanf:"http_server_port"`
+	Metrics        metrics.Config `koanf:"metrics"`
+	Auth           jwt.Config     `koanf:"auth"`
+	Logger         logger.Config  `koanf:"logger"`
+	Storage        storage.Config `koanf:"storage"`
 }
 
 // LoadConfigs returns the config struct.
