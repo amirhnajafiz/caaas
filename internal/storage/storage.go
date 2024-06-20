@@ -1,22 +1,25 @@
 package storage
 
 import (
+	"context"
 	"fmt"
 
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
+	"github.com/go-pg/pg/v10"
 )
 
-// NewConnection to mysql server.
-func NewConnection(cfg Config) (*gorm.DB, error) {
-	address := fmt.Sprintf(
-		"%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
-		cfg.User,
-		cfg.Pass,
-		cfg.Host,
-		cfg.Port,
-		cfg.Database,
-	)
+// NewConnection to the give Postgres database.
+func NewConnection(cfg Config) (*pg.DB, error) {
+	opt, err := pg.ParseURL(cfg.URL())
+	if err != nil {
+		return nil, fmt.Errorf("failed to connect to database: %v", err)
+	}
 
-	return gorm.Open(mysql.Open(address), &gorm.Config{})
+	db := pg.Connect(opt)
+
+	ctx := context.Background()
+	if err := db.Ping(ctx); err != nil {
+		return nil, fmt.Errorf("failed to ping database: %v", err)
+	}
+
+	return db, nil
 }

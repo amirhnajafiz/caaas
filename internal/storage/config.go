@@ -1,5 +1,7 @@
 package storage
 
+import "fmt"
+
 // Config stores storage connection parameters.
 type Config struct {
 	Host     string `koanf:"host"`
@@ -7,4 +9,8 @@ type Config struct {
 	User     string `koanf:"user"`
 	Pass     string `koanf:"pass"`
 	Database string `koanf:"database"`
+}
+
+func (c Config) URL() string {
+	return fmt.Sprintf("postgres://%s:%s@%s:%d/%s", c.User, c.Pass, c.Host, c.Port, c.Database)
 }
