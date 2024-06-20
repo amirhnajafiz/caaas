@@ -14,6 +14,13 @@ func (c *Controller) NewUser(username, password string) error {
 	return err
 }
 
+// UpdateUser updates the give user's password.
+func (c *Controller) UpdateUser(username, password string) error {
+	_, err := c.database.Model(&model.User{}).Set("password = ?", password).Where("username = ?", username).Update()
+
+	return err
+}
+
 // DeleteUser removes an existing user with its groups.
 func (c *Controller) DeleteUser(username string) error {
 	tx, err := c.database.Begin()
