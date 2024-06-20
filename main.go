@@ -19,7 +19,11 @@ func main() {
 	}
 
 	// reload a handler and execute it
-	if err := handlers.LoadHandler(cfg, db).Execute(); err != nil {
+	hd := handlers.LoadHandler(cfg, db)
+	if hd == nil {
+		log.Fatalf("give mode is not supported\n")
+	}
+	if err := hd.Execute(); err != nil {
 		log.Fatal(err)
 	}
 }
