@@ -4,7 +4,7 @@ import (
 	"log"
 
 	"github.com/amirhnajafiz/caaas/internal/storage"
-	"github.com/amirhnajafiz/caaas/pkg/auth"
+	"github.com/amirhnajafiz/caaas/pkg/jwt"
 	"github.com/amirhnajafiz/caaas/pkg/logger"
 
 	"github.com/knadh/koanf"
@@ -15,7 +15,7 @@ import (
 
 // Config stores the application parameters.
 type Config struct {
-	Auth    auth.Config    `koanf:"auth"`
+	Auth    jwt.Config     `koanf:"auth"`
 	Logger  logger.Config  `koanf:"logger"`
 	Storage storage.Config `koanf:"storage"`
 }

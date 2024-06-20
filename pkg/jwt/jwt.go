@@ -1,7 +1,8 @@
-package auth
+package jwt
 
 import (
 	"errors"
+	"time"
 
 	"github.com/golang-jwt/jwt/v4"
 )
@@ -13,6 +14,7 @@ var (
 
 type Auth struct {
 	key    string
+	salt   string
 	expire int
 }
 
@@ -20,22 +22,25 @@ type Auth struct {
 func New(cfg Config) *Auth {
 	return &Auth{
 		key:    cfg.PrivateKey,
-		expire: cfg.ExpireTime,
+		expire: cfg.TokensExpireTime,
+		salt:   cfg.EncryptionSalt,
 	}
 }
 
 // GenerateJWT creates a new JWT token.
-func (a *Auth) GenerateJWT(clientID, appKey string) (string, error) {
+func (a *Auth) GenerateJWT(id int, username string) (string, error) {
 	// create a new token
 	token := jwt.New(jwt.SigningMethodHS256)
 
 	// create claims
 	claims := token.Claims.(jwt.MapClaims)
-	claims["client_id"] = clientID
-	claims["app_key"] = appKey
+	claims["id"] = id
+	claims["username"] = username
+	claims["exp"] = time.Now().Add(time.Minute * time.Duration(a.expire)).Unix()
+	claims["authorized"] = true
 
 	// generate token string
-	tokenString, err := token.SignedString([]byte(a.key))
+	tokenString, err := token.SignedString([]byte(a.salt + a.key))
 	if err != nil {
 		return "", err
 	}
@@ -44,25 +49,24 @@ func (a *Auth) GenerateJWT(clientID, appKey string) (string, error) {
 }
 
 // ParseJWT gets a token string and extracts the data.
-func (a *Auth) ParseJWT(tokenString string) (string, string, error) {
+func (a *Auth) ParseJWT(tokenString string) (string, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return "", errSigningMethod
 		}
 
-		return []byte(a.key), nil
+		return []byte(a.salt + a.key), nil
 	})
 	if err != nil {
-		return "", "", err
+		return "", err
 	}
 
 	// taking out claims
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		id := claims["client_id"].(string)
-		key := claims["app_key"].(string)
+		key := claims["username"].(string)
 
-		return id, key, nil
+		return key, nil
 	}
 
-	return "", "", errInvalidToken
+	return "", errInvalidToken
 }
