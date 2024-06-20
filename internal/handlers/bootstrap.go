@@ -31,13 +31,16 @@ func (l *loader) bootstrap() {
 	l.auth = jwt.New(l.cfg.Auth)
 }
 
+// LoadHandler returns a handler based on the mode which is set in configs.
 func LoadHandler(cfg config.Config, db *pg.DB) Handler {
+	// bootstrap section
 	l := loader{
 		cfg:      cfg,
 		database: db,
 	}
 	l.bootstrap()
 
+	// handler selector
 	switch cfg.Mode {
 	case enum.ModeAPI:
 		return nil
