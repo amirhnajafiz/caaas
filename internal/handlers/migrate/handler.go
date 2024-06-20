@@ -9,7 +9,7 @@ import (
 
 // Migrate handler is used for creating database schemas.
 type Handler struct {
-	database *pg.DB
+	Database *pg.DB
 }
 
 func (h Handler) Execute() error {
@@ -19,7 +19,7 @@ func (h Handler) Execute() error {
 	}
 
 	for _, model := range models {
-		err := h.database.Model(model).CreateTable(&orm.CreateTableOptions{
+		err := h.Database.Model(model).CreateTable(&orm.CreateTableOptions{
 			Temp: true,
 		})
 		if err != nil {
