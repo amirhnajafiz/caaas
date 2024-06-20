@@ -7,6 +7,7 @@ import (
 	"github.com/go-pg/pg/v10/orm"
 )
 
+// Migrate handler is used for creating database schemas.
 type Handler struct {
 	database *pg.DB
 }
