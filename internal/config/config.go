@@ -29,7 +29,7 @@ type Config struct {
 }
 
 // LoadConfigs returns the config struct.
-func LoadConfigs() Config {
+func LoadConfigs(path string) Config {
 	var instance Config
 
 	k := koanf.New(".")
@@ -40,7 +40,7 @@ func LoadConfigs() Config {
 	}
 
 	// load configs file
-	if err := k.Load(file.Provider("config.yaml"), yaml.Parser()); err != nil {
+	if err := k.Load(file.Provider(path), yaml.Parser()); err != nil {
 		log.Printf("error loading config.yaml file: %v\n", err)
 	}
 

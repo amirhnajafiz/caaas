@@ -10,7 +10,7 @@ import (
 
 func main() {
 	// load configs
-	cfg := config.LoadConfigs()
+	cfg := config.LoadConfigs("config.yaml")
 
 	// open database connection
 	db, err := storage.NewConnection(cfg.Storage)
