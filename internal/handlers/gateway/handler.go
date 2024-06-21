@@ -29,11 +29,19 @@ func (h Handler) health(c echo.Context) error {
 func (h Handler) Execute() error {
 	e := echo.New()
 
-	// register endpoints
+	// register k8s endpoints
 	e.GET("/healthz", h.health)
 
 	// register metric needed enpoints
 	e.Use(h.requestsMiddleware)
+
+	// loging endpoint
+	e.POST("/", h.login)
+
+	// user endpoints
+	e.Use(h.authMiddleware)
+	e.GET("/", h.validate)
+	e.GET("/groups", h.groups)
 
 	return e.Start(fmt.Sprintf(":%d", h.Port))
 }
