@@ -1,0 +1,17 @@
+mode: "gateway" # an enum of (api, gateway, and migrate), default is gateway
+http_server_port: 8080 # default value is 8080
+metrics:
+  enable: true # if set to disable, no metrics will export
+  port: 8081 # if enabled, it will be the exporter's port
+auth:
+  private_key: "private"
+  encryption_salt: "salt"
+  tokens_expire_time: 30 # in minutes, default is 30
+logger:
+  level: "error" # an enum of (debug, info, warn, error, fatal, panic) default is error
+storage:
+  host: "127.0.0.1"
+  port: 5432
+  user: "root"
+  pass: "password"
+  database: "caaas-db" 
