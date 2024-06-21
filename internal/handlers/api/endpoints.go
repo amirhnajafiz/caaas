@@ -28,7 +28,16 @@ func (h Handler) addUserToGroup(c echo.Context) error {
 }
 
 func (h Handler) removeUserFromGroup(c echo.Context) error {
-	return nil
+	group := c.QueryParam("group")
+	username := c.QueryParam("username")
+
+	if err := h.Ctl.RemoveUserGroup(username, group); err != nil {
+		h.Logger.Error("failed to remove user from a group", zap.String("username", username), zap.String("group", group), zap.Error(err))
+
+		return echo.ErrInternalServerError
+	}
+
+	return c.String(http.StatusOK, "")
 }
 
 func (h Handler) removeGroup(c echo.Context) error {
