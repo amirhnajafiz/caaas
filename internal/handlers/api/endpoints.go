@@ -3,6 +3,8 @@ package api
 import (
 	"net/http"
 
+	"github.com/amirhnajafiz/caaas/pkg/hashing"
+
 	"github.com/labstack/echo/v4"
 	"go.uber.org/zap"
 )
@@ -10,6 +12,7 @@ import (
 func (h Handler) getAllUsers(c echo.Context) error {
 	keyword := c.QueryParam("keyword")
 
+	// fetch users
 	users, err := h.Ctl.GetUsers(keyword)
 	if err != nil {
 		h.Logger.Error("failed to get users", zap.Error(err))
@@ -17,6 +20,7 @@ func (h Handler) getAllUsers(c echo.Context) error {
 		return echo.ErrInternalServerError
 	}
 
+	// convert them to response
 	list := make([]UserResponse, len(users))
 	for index, user := range users {
 		list[index] = UserResponse{
@@ -30,16 +34,45 @@ func (h Handler) getAllUsers(c echo.Context) error {
 }
 
 func (h Handler) createUser(c echo.Context) error {
-	return nil
+	// get user request
+	req := new(UserRequest)
+
+	if err := c.Bind(req); err != nil {
+		return echo.ErrBadRequest
+	}
+
+	req.Password = hashing.MD5Hash(req.Password)
+
+	// create new user
+	if err := h.Ctl.NewUser(req.Username, req.Password); err != nil {
+		h.Logger.Error("failed to create user", zap.Error(err))
+	}
+
+	return c.String(http.StatusOK, "")
 }
 
 func (h Handler) updateUser(c echo.Context) error {
-	return nil
+	// get user request
+	req := new(UserRequest)
+
+	if err := c.Bind(req); err != nil {
+		return echo.ErrBadRequest
+	}
+
+	req.Password = hashing.MD5Hash(req.Password)
+
+	// update user
+	if err := h.Ctl.UpdateUser(req.Username, req.Password); err != nil {
+		h.Logger.Error("failed to update user", zap.Error(err))
+	}
+
+	return c.String(http.StatusOK, "")
 }
 
 func (h Handler) removeUser(c echo.Context) error {
 	username := c.QueryParam("username")
 
+	// remove user
 	if err := h.Ctl.DeleteUser(username); err != nil {
 		h.Logger.Error("failed to remove a user", zap.String("username", username), zap.Error(err))
 
@@ -53,6 +86,7 @@ func (h Handler) addUserToGroup(c echo.Context) error {
 	group := c.QueryParam("group")
 	username := c.QueryParam("username")
 
+	// add user to a group
 	if err := h.Ctl.NewUserGroup(username, group); err != nil {
 		h.Logger.Error("failed to add user to a group", zap.String("username", username), zap.String("group", group), zap.Error(err))
 
@@ -66,6 +100,7 @@ func (h Handler) removeUserFromGroup(c echo.Context) error {
 	group := c.QueryParam("group")
 	username := c.QueryParam("username")
 
+	// remove user from a gorup
 	if err := h.Ctl.RemoveUserGroup(username, group); err != nil {
 		h.Logger.Error("failed to remove user from a group", zap.String("username", username), zap.String("group", group), zap.Error(err))
 
@@ -78,6 +113,7 @@ func (h Handler) removeUserFromGroup(c echo.Context) error {
 func (h Handler) removeGroup(c echo.Context) error {
 	group := c.QueryParam("group")
 
+	// remove a group
 	if err := h.Ctl.RemoveGroup(group); err != nil {
 		h.Logger.Error("failed to remove a group", zap.String("group", group), zap.Error(err))
 
