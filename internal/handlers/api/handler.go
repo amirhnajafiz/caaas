@@ -1,8 +1,11 @@
 package api
 
 import (
+	"fmt"
+
 	"github.com/amirhnajafiz/caaas/internal/controller"
 
+	"github.com/labstack/echo/v4"
 	"go.uber.org/zap"
 )
 
@@ -15,5 +18,7 @@ type Handler struct {
 }
 
 func (h Handler) Execute() error {
-	return nil
+	e := echo.New()
+
+	return e.Start(fmt.Sprintf(":%d", h.Port))
 }
