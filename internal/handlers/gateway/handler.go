@@ -22,6 +22,13 @@ type Handler struct {
 	Port    int
 }
 
+func (h Handler) requestsMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		h.Metrics.AddRequest(c.Path())
+		return next(c)
+	}
+}
+
 func (h Handler) health(c echo.Context) error {
 	return c.String(http.StatusOK, "")
 }
@@ -31,6 +38,9 @@ func (h Handler) Execute() error {
 
 	// register endpoints
 	e.GET("/healthz", h.health)
+
+	// register metric needed enpoints
+	e.Use(h.requestsMiddleware)
 
 	return e.Start(fmt.Sprintf(":%d", h.Port))
 }
