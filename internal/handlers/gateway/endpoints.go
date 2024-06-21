@@ -44,9 +44,24 @@ func (h Handler) login(c echo.Context) error {
 }
 
 func (h Handler) validate(c echo.Context) error {
-	return nil
+	return c.JSON(http.StatusOK, ClaimResponse{
+		Username: c.Get("username").(string),
+	})
 }
 
 func (h Handler) groups(c echo.Context) error {
-	return nil
+	username := c.Get("username").(string)
+
+	// fetch user groups
+	groups, err := h.Ctl.GetUserGroups(username)
+	if err != nil {
+		h.Logger.Error("failed to fetch groups", zap.String("username", username), zap.Error(err))
+
+		return echo.ErrNotFound
+	}
+
+	return c.JSON(http.StatusOK, GroupsResponse{
+		Username: username,
+		Groups:   groups,
+	})
 }
