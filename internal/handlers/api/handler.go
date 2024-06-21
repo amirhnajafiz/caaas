@@ -25,8 +25,24 @@ func (h Handler) health(c echo.Context) error {
 func (h Handler) Execute() error {
 	e := echo.New()
 
-	// register endpoints
+	// register k8s endpoints
 	e.GET("/healthz", h.health)
+
+	// register normal endpoints
+	api := e.Group("/api")
+	users := api.Group("/users")
+	groups := api.Group("/groups")
+
+	// users methods
+	users.GET("/", h.getAllUsers)
+	users.POST("/", h.createUser)
+	users.PATCH("/", h.updateUser)
+	users.DELETE("/", h.removeUser)
+
+	// groups methods
+	groups.POST("/", h.addUserToGroup)
+	groups.PATCH("/", h.removeUserFromGroup)
+	groups.DELETE("/", h.removeGroup)
 
 	return e.Start(fmt.Sprintf(":%d", h.Port))
 }
