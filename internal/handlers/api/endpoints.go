@@ -8,7 +8,25 @@ import (
 )
 
 func (h Handler) getAllUsers(c echo.Context) error {
-	return nil
+	keyword := c.QueryParam("keyword")
+
+	users, err := h.Ctl.GetUsers(keyword)
+	if err != nil {
+		h.Logger.Error("failed to get users", zap.Error(err))
+
+		return echo.ErrInternalServerError
+	}
+
+	list := make([]UserResponse, len(users))
+	for index, user := range users {
+		list[index] = UserResponse{
+			Username:  user.Username,
+			CreatedAt: user.CreatedAt,
+			UpdatedAt: user.UpdatedAt,
+		}
+	}
+
+	return c.JSON(http.StatusOK, list)
 }
 
 func (h Handler) createUser(c echo.Context) error {
