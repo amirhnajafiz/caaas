@@ -15,11 +15,6 @@ caaas:
     type: ClusterIP
     port: 80
 
-  ingress:
-    enabled: false
-    hosts: []
-    tls: []
-
   resources:
     limits:
       cpu: 100m
@@ -27,9 +22,3 @@ caaas:
     requests:
       cpu: 100m
       memory: 128Mi
-
-  autoscaling:
-    enabled: false
-    minReplicas: 1
-    maxReplicas: 10
-    targetCPUUtilizationPercentage: 80
