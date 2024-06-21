@@ -29,9 +29,9 @@ func (h Handler) Execute() error {
 	e.GET("/healthz", h.health)
 
 	// register normal endpoints
-	api := e.Group("/api")
-	users := api.Group("/users")
-	groups := api.Group("/groups")
+	v1 := e.Group("/api/v1")
+	users := v1.Group("/users")
+	groups := v1.Group("/groups")
 
 	// users methods
 	users.GET("/", h.getAllUsers)
