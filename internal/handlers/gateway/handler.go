@@ -2,6 +2,7 @@ package gateway
 
 import (
 	"fmt"
+	"net/http"
 
 	"github.com/amirhnajafiz/caaas/internal/controller"
 	"github.com/amirhnajafiz/caaas/internal/monitoring/metrics"
@@ -21,8 +22,15 @@ type Handler struct {
 	Port    int
 }
 
+func (h Handler) health(c echo.Context) error {
+	return c.String(http.StatusOK, "")
+}
+
 func (h Handler) Execute() error {
 	e := echo.New()
+
+	// register endpoints
+	e.GET("/healthz", h.health)
 
 	return e.Start(fmt.Sprintf(":%d", h.Port))
 }
