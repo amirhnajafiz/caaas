@@ -1,17 +1,26 @@
+# mode is used for selecting CAAAS running process's logic.
+# api mode is being used for managing users and groups.
+# gateway mode is for the authenticator apps.
+# migrate mode is used for init container.
 mode: "gateway" # an enum of (api, gateway, and migrate), default is gateway
 http_server_port: 8080 # default value is 8080
+# prometheus metrics can be exported as a separate server.
 metrics:
   enable: true # if set to disable, no metrics will export
   port: 8081 # if enabled, it will be the exporter's port
+# keys and settings for JWTs.
 auth:
   private_key: "private"
   encryption_salt: "salt"
   tokens_expire_time: 30 # in minutes, default is 30
+# internal logger level. highly recommend to set to warn or error, otherwise
+# you will face a huge amount of unneccesary logs.
 logger:
   level: "error" # an enum of (debug, info, warn, error, fatal, panic) default is error
+# postgres cluster connection arguments.
 storage:
   host: "127.0.0.1"
   port: 5432
   user: "root"
   pass: "password"
-  database: "caaas-db" 
+  database: "caaas-db" # don't change if not neccesary

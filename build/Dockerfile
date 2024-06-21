@@ -1,5 +1,7 @@
+# using golang:1.22 base image
 FROM golang:1.22-alpine
 
+# don't change workdir
 WORKDIR /usr/share/caass
 
 COPY internal/ internal/
