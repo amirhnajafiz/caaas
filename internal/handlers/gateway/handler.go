@@ -2,6 +2,7 @@ package gateway
 
 import (
 	"github.com/amirhnajafiz/caaas/internal/controller"
+	"github.com/amirhnajafiz/caaas/internal/monitoring/metrics"
 	"github.com/amirhnajafiz/caaas/pkg/jwt"
 
 	"go.uber.org/zap"
@@ -10,10 +11,11 @@ import (
 // Gateway handler is responsible for handling users
 // authentication and authorization requests.
 type Handler struct {
-	Logger *zap.Logger
-	Ctl    *controller.Controller
-	Auth   *jwt.Auth
-	Port   int
+	Logger  *zap.Logger
+	Ctl     *controller.Controller
+	Auth    *jwt.Auth
+	Metrics *metrics.Metrics
+	Port    int
 }
 
 func (h Handler) Execute() error {

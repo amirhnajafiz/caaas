@@ -60,10 +60,11 @@ func LoadHandler(cfg config.Config, db *pg.DB) Handler {
 		}
 	case enum.ModeGW:
 		return &gateway.Handler{
-			Logger: l.logger.Named("gateway"),
-			Ctl:    l.ctl,
-			Auth:   l.auth,
-			Port:   l.cfg.HTTPServerPort,
+			Logger:  l.logger.Named("gateway"),
+			Ctl:     l.ctl,
+			Auth:    l.auth,
+			Port:    l.cfg.HTTPServerPort,
+			Metrics: l.metrics,
 		}
 	case enum.ModeMigrate:
 		return &migrate.Handler{
