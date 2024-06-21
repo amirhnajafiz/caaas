@@ -1,0 +1,35 @@
+postgresql:
+  auth:
+      postgresPassword: "password"
+      username: "root"
+      password: "password"
+      database: "caaas"
+
+caaas:
+  image:
+    repository: ghcr.io/amirhnajafiz/caaas
+    pullPolicy: IfNotPresent
+    tag: "v0.1.0"
+
+  service:
+    type: ClusterIP
+    port: 80
+
+  ingress:
+    enabled: false
+    hosts: []
+    tls: []
+
+  resources:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 80
