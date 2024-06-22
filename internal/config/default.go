@@ -25,11 +25,11 @@ func Default() Config {
 			Level: "debug",
 		},
 		Storage: storage.Config{
-			Port:     3306,
+			Port:     5432,
 			Host:     "127.0.0.1",
-			User:     "root",
-			Pass:     "Amir2222",
-			Database: "authx",
+			User:     "user",
+			Pass:     "password",
+			Database: "caaas-db",
 		},
 	}
 }

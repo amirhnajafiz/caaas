@@ -20,7 +20,7 @@ func (h Handler) Execute() error {
 
 	for _, model := range models {
 		err := h.Database.Model(model).CreateTable(&orm.CreateTableOptions{
-			Temp: true,
+			IfNotExists: true,
 		})
 		if err != nil {
 			return err
