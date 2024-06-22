@@ -3,10 +3,9 @@
 # make sure to apply the following values in caaas config values.
 postgresql:
   auth:
-      postgresPassword: "password"
-      username: "root"
-      password: "password"
-      database: "caaas-db"
+    username: "root"
+    password: "password"
+    database: "caaas-db"
 
 # set caaas configs.
 caaas:
@@ -38,3 +37,31 @@ caaas:
       requests:
         cpu: 100m
         memory: 128Mi
+    
+  # setup config files for api, migrate, and service containers
+  configs:
+    api:
+      mode: "api"
+      http_server_port: 8080 # default value is 8080
+    gateway:
+      mode: "gateway" # an enum of (api, gateway, and migrate), default is gateway
+      http_server_port: 8080 # default value is 8080
+      # prometheus metrics can be exported as a separate server.
+      metrics:
+        enable: true # if set to disable, no metrics will export
+        port: 8081 # if enabled, it will be the exporter's port
+      # keys and settings for JWTs.
+      auth:
+        private_key: "private"
+        encryption_salt: "salt"
+        tokens_expire_time: 30 # in minutes, default is 30
+    common: # common section will be applied to all configmaps
+      logger:
+        level: "error" # an enum of (debug, info, warn, error, fatal, panic) default is error
+      # postgres cluster connection arguments.
+      storage:
+        host: "postgresql"
+        port: 5432
+        user: "root"
+        pass: "password"
+        database: "caaas-db" 
