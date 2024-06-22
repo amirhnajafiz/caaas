@@ -58,10 +58,3 @@ caaas:
     common: # common section will be applied to all configmaps
       logger:
         level: "error" # an enum of (debug, info, warn, error, fatal, panic) default is error
-      # postgres cluster connection arguments.
-      storage:
-        host: "postgresql"
-        port: 5432
-        user: "root"
-        pass: "password"
-        database: "caaas-db" 
