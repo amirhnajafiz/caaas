@@ -33,13 +33,13 @@ func (h Handler) Execute() error {
 	e.GET("/healthz", h.health)
 
 	// register metric needed enpoints
-	e.Use(h.requestsMiddleware)
+	counts := e.Group("", h.requestsMiddleware)
 
 	// loging endpoint
-	e.POST("/", h.login)
+	counts.POST("/", h.login)
 
 	// user endpoints
-	auth := e.Group("", h.authMiddleware)
+	auth := counts.Group("", h.authMiddleware)
 	auth.GET("/", h.validate)
 	auth.GET("/groups", h.groups)
 
