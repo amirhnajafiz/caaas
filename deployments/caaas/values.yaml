@@ -3,7 +3,7 @@
 # make sure to apply the following values in caaas config values.
 postgresql:
   auth:
-    username: "root"
+    username: "user"
     password: "password"
     database: "caaas-db"
 

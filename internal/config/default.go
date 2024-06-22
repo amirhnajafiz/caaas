@@ -13,7 +13,7 @@ func Default() Config {
 		Mode:           enum.ModeGW,
 		HTTPServerPort: 8080,
 		Metrics: metrics.Config{
-			Enable: true,
+			Enable: false,
 			Port:   8081,
 		},
 		Auth: jwt.Config{

@@ -39,9 +39,9 @@ func (h Handler) Execute() error {
 	e.POST("/", h.login)
 
 	// user endpoints
-	e.Use(h.authMiddleware)
-	e.GET("/", h.validate)
-	e.GET("/groups", h.groups)
+	auth := e.Group("", h.authMiddleware)
+	auth.GET("/", h.validate)
+	auth.GET("/groups", h.groups)
 
 	return e.Start(fmt.Sprintf(":%d", h.Port))
 }
