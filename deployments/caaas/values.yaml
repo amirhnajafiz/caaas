@@ -1,24 +1,40 @@
+# set postgresql values for postgresql dependency charts.
+# we set postgres username, password, and database name.
+# make sure to apply the following values in caaas config values.
 postgresql:
   auth:
       postgresPassword: "password"
       username: "root"
       password: "password"
-      database: "caaas"
+      database: "caaas-db"
 
+# set caaas configs.
 caaas:
+  # image repository is published over github-container-registery
   image:
     repository: ghcr.io/amirhnajafiz/caaas
     pullPolicy: IfNotPresent
     tag: "v0.1.0"
 
+  # change service type based on your desire, it will be set for both api and gateway.
+  # in order to expose gateways, create an ingress or an external service.
   service:
     type: ClusterIP
     port: 80
 
+  # resources will be applied to gateway and api applications
   resources:
-    limits:
-      cpu: 100m
-      memory: 128Mi
-    requests:
-      cpu: 100m
-      memory: 128Mi
+    api:
+      limits:
+        cpu: 100m
+        memory: 128Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
+    gateway:
+      limits:
+        cpu: 100m
+        memory: 128Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
