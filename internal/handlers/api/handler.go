@@ -6,6 +6,7 @@ import (
 
 	"github.com/amirhnajafiz/caaas/internal/controller"
 	v1 "github.com/amirhnajafiz/caaas/internal/handlers/api/v1"
+	v2 "github.com/amirhnajafiz/caaas/internal/handlers/api/v2"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -52,6 +53,10 @@ func (h Handler) Execute() error {
 		Logger: h.Logger.Named("v1"),
 		Ctl:    h.Ctl,
 	}.New(api.Group("v1"))
+	v2.Handler{
+		Logger: h.Logger.Named("v2"),
+		Ctl:    h.Ctl,
+	}.New(api.Group("v2"))
 
 	return e.Start(fmt.Sprintf(":%d", h.Port))
 }
