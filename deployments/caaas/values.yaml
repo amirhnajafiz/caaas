@@ -27,6 +27,9 @@ caaas:
   # if set to false, it will read database configs from configs sections in caaas.
   dbConfigsFromPostgresCharts: true
 
+  # replicas only will apply to gateway apps.
+  replicas: 5
+
   # change service type based on your desire, it will be set for both api and gateway.
   # in order to expose gateways, create an ingress or an external service.
   service:

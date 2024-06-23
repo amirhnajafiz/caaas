@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: {{ .Release.Name }}-replicaset
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{ toYaml .Values.caaas.labels | default "{}" }}
+spec:
+  replicas: {{ .Values.caaas.replicas }}
+  selector:
+    matchLabels:
+      {{ toYaml .Values.caaas.labels | default "{}" }}
+  template:
+    metadata:
+      labels:
+        {{ toYaml .Values.caaas.labels | default "{}" }}
+    spec:
+      containers:
+      - name: gw-container
+        imagePullPolicy: {{ .Values.caaas.image.pullPolicy }}
+        image: {{ .Values.caaas.image.repository }}:{{ .Values.caaas.image.tag }}
+        env:
+        - name: CAAAS_MODE
+          value: "gateway"
+        ports:
+        - name: http
+          containerPort: {{ .Values.caaas.configs.http_server_port }}
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: http
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: http
+        resources:
+          {{- toYaml .Values.caaas.resources.gateway | nindent 10 }}
+        volumeMounts:
+        - name: configmap-file  
+          mountPath: "/usr/share/caass/config.yaml"
+          subPath: "config.yaml"
+          readOnly: true
+    volumes:
+    - name: configmap-file  
+      configMap:
+        name: {{ .Release.Name }}-configmap
+    restartPolicy: Never
