@@ -36,7 +36,6 @@ func (h Handler) getAllUsers(c echo.Context) error {
 func (h Handler) createUser(c echo.Context) error {
 	// get user request
 	req := new(UserRequest)
-
 	if err := c.Bind(req); err != nil {
 		return echo.ErrBadRequest
 	}
@@ -54,7 +53,6 @@ func (h Handler) createUser(c echo.Context) error {
 func (h Handler) updateUser(c echo.Context) error {
 	// get user request
 	req := new(UserRequest)
-
 	if err := c.Bind(req); err != nil {
 		return echo.ErrBadRequest
 	}
@@ -83,12 +81,15 @@ func (h Handler) removeUser(c echo.Context) error {
 }
 
 func (h Handler) addUserToGroup(c echo.Context) error {
-	group := c.QueryParam("group")
-	username := c.QueryParam("username")
+	// fetch query params
+	req := new(UserGroupQuery)
+	if err := c.Bind(req); err != nil {
+		return echo.ErrBadRequest
+	}
 
 	// add user to a group
-	if err := h.Ctl.NewUserGroup(username, group); err != nil {
-		h.Logger.Error("failed to add user to a group", zap.String("username", username), zap.String("group", group), zap.Error(err))
+	if err := h.Ctl.NewUserGroup(req.Username, req.Group); err != nil {
+		h.Logger.Error("failed to add user to a group", zap.String("username", req.Username), zap.String("group", req.Group), zap.Error(err))
 
 		return echo.ErrInternalServerError
 	}
@@ -97,12 +98,15 @@ func (h Handler) addUserToGroup(c echo.Context) error {
 }
 
 func (h Handler) removeUserFromGroup(c echo.Context) error {
-	group := c.QueryParam("group")
-	username := c.QueryParam("username")
+	// fetch query params
+	req := new(UserGroupQuery)
+	if err := c.Bind(req); err != nil {
+		return echo.ErrBadRequest
+	}
 
 	// remove user from a gorup
-	if err := h.Ctl.RemoveUserGroup(username, group); err != nil {
-		h.Logger.Error("failed to remove user from a group", zap.String("username", username), zap.String("group", group), zap.Error(err))
+	if err := h.Ctl.RemoveUserGroup(req.Username, req.Group); err != nil {
+		h.Logger.Error("failed to remove user from a group", zap.String("username", req.Username), zap.String("group", req.Group), zap.Error(err))
 
 		return echo.ErrInternalServerError
 	}
