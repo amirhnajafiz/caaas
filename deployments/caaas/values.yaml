@@ -2,7 +2,7 @@
 # we set postgres username, password, and database name.
 # make sure to apply the following values in caaas config values.
 postgresql:
-  enable: true
+  enabled: true
   auth:
     username: "user"
     password: "password"
@@ -15,6 +15,10 @@ caaas:
     repository: ghcr.io/amirhnajafiz/caaas
     pullPolicy: IfNotPresent
     tag: "v0.1.0"
+  
+  # setting labels
+  labels:
+    app: caaas
   
   # if this parameter is set true, database configs will be read from
   # values file of a postgres cluster created by it charts.
