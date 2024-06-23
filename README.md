@@ -1,9 +1,11 @@
 # CAAAS
 
-Authentication and Authorization.
+Centeral Authentication and Authorization service. CAAAS is a simple tool for identifying your users. It supports global group resources in order to authorize your users.
 
-- For each user => ID, Username, Password
-- For each user-group => UserID, GroupName
+## Structure
+
+- For each user it has Username and Password
+- For each user-group it sets Username and GroupName
 
 ## APIs
 
