@@ -1,20 +1,20 @@
 apiVersion: apps/v1
-kind: ReplicaSet
+kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-replicaset
+  name: {{ .Release.Name }}-statefulset
   namespace: {{ .Release.Namespace }}
   labels:
     {{ toYaml .Values.caaas.labels | default "{}" }}
 spec:
-  replicas: {{ .Values.caaas.replicas }}
+  replicas: 1
   selector:
     matchLabels:
-      caaas.application.type: gateway
+      caaas.application.type: api
       {{ toYaml .Values.caaas.labels | default "{}" }}
   template:
     metadata:
       labels:
-        caaas.application.type: gateway
+        caaas.application.type: api
         {{ toYaml .Values.caaas.labels | default "{}" }}
     spec:
       containers:
@@ -23,7 +23,7 @@ spec:
         image: {{ .Values.caaas.image.repository }}:{{ .Values.caaas.image.tag }}
         env:
         - name: CAAAS_MODE
-          value: "gateway"
+          value: "api"
         ports:
         - name: http
           containerPort: {{ .Values.caaas.configs.http_server_port }}
