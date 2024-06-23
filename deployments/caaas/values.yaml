@@ -2,6 +2,7 @@
 # we set postgres username, password, and database name.
 # make sure to apply the following values in caaas config values.
 postgresql:
+  enable: true
   auth:
     username: "user"
     password: "password"
@@ -14,6 +15,11 @@ caaas:
     repository: ghcr.io/amirhnajafiz/caaas
     pullPolicy: IfNotPresent
     tag: "v0.1.0"
+  
+  # if this parameter is set true, database configs will be read from
+  # values file of a postgres cluster created by it charts.
+  # if set to false, it will read database configs from configs sections in caaas.
+  dbConfigsFromPostgresCharts: true
 
   # change service type based on your desire, it will be set for both api and gateway.
   # in order to expose gateways, create an ingress or an external service.
@@ -40,21 +46,23 @@ caaas:
     
   # setup config files for api, migrate, and service containers
   configs:
-    api:
-      mode: "api"
-      http_server_port: 8080 # default value is 8080
-    gateway:
-      mode: "gateway" # an enum of (api, gateway, and migrate), default is gateway
-      http_server_port: 8080 # default value is 8080
-      # prometheus metrics can be exported as a separate server.
-      metrics:
-        enable: true # if set to disable, no metrics will export
-        port: 8081 # if enabled, it will be the exporter's port
-      # keys and settings for JWTs.
-      auth:
-        private_key: "private"
-        encryption_salt: "salt"
-        tokens_expire_time: 30 # in minutes, default is 30
-    common: # common section will be applied to all configmaps
-      logger:
-        level: "error" # an enum of (debug, info, warn, error, fatal, panic) default is error
+    # giving postgres storage params
+    storage:
+      host: ""
+      port: 5432
+      user: "user"
+      pass: "password"
+      database: "caaas-db"
+    http_server_port: 8080 # default value is 8080
+    # prometheus metrics can be exported as a separate server.
+    # only works for gateway apps.
+    metrics:
+      enable: true # if set to disable, no metrics will export
+      port: 8081 # if enabled, it will be the exporter's port
+    # keys and settings for gateway JWTs.
+    auth:
+      private_key: "private"
+      encryption_salt: "salt"
+      tokens_expire_time: 30 # in minutes, default is 30
+    logger:
+      level: "error" # an enum of (debug, info, warn, error, fatal, panic) default is error
