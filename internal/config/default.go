@@ -30,6 +30,7 @@ func Default() Config {
 			User:     "user",
 			Pass:     "password",
 			Database: "caaas-db",
+			SSL:      false,
 		},
 	}
 }

@@ -53,6 +53,7 @@ caaas:
       user: "user"
       pass: "password"
       database: "caaas-db"
+      ssl: false
     http_server_port: 8080 # default value is 8080
     # prometheus metrics can be exported as a separate server.
     # only works for gateway apps.
