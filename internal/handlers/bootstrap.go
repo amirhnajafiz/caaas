@@ -36,7 +36,7 @@ func (l *loader) bootstrap() {
 	// create metrics instance
 	l.metrics = metrics.NewMetrics()
 	// create metrics server if enable
-	if l.cfg.Metrics.Enable {
+	if l.cfg.Mode == enum.ModeGW && l.cfg.Metrics.Enable {
 		metrics.StartServer(l.cfg.Metrics.Port)
 	}
 }
