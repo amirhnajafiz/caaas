@@ -52,11 +52,11 @@ func (h Handler) Execute() error {
 	v1.Handler{
 		Logger: h.Logger.Named("v1"),
 		Ctl:    h.Ctl,
-	}.New(api.Group("v1"))
+	}.New(api.Group("/v1"))
 	v2.Handler{
 		Logger: h.Logger.Named("v2"),
 		Ctl:    h.Ctl,
-	}.New(api.Group("v2"))
+	}.New(api.Group("/v2"))
 
 	return e.Start(fmt.Sprintf(":%d", h.Port))
 }
