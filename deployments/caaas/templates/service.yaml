@@ -1,15 +1,34 @@
+---
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "caaas.fullname" . }}
+  name: {{ include "caaas.fullname" . }}-api
   labels:
     {{ toYaml .Values.caaas.labels | default "{}" }}
 spec:
   type: {{ .Values.caaas.service.type }}
   ports:
     - port: {{ .Values.caaas.service.port }}
-      targetPort: http
+      targetPort: {{ .Values.caaas.service.port }}
       protocol: TCP
       name: http
   selector:
+    caaas.application.type: api
+    {{ toYaml .Values.caaas.labels | default "{}" }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "caaas.fullname" . }}-gateway
+  labels:
+    {{ toYaml .Values.caaas.labels | default "{}" }}
+spec:
+  type: {{ .Values.caaas.service.type }}
+  ports:
+    - port: {{ .Values.caaas.service.port }}
+      targetPort: {{ .Values.caaas.service.port }}
+      protocol: TCP
+      name: http
+  selector:
+    caaas.application.type: gateway
     {{ toYaml .Values.caaas.labels | default "{}" }}
