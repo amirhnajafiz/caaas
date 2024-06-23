@@ -4,32 +4,31 @@ metadata:
   name: {{ .Release.Name }}-configmap
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- toYaml .Values.caaas.labels | default "{}" | indent 4 }}
+    {{ toYaml .Values.caaas.labels | default "{}" }}
 data:
   config.yaml:
     http_server_port: {{ .Values.caaas.configs.http_server_port }}
     metrics:
-        enable: {{ .Values.caaas.configs.metrics.enable }}
-        port: {{ .Values.caaas.configs.metrics.port }}
+      enable: {{ .Values.caaas.configs.metrics.enable }}
+      port: {{ .Values.caaas.configs.metrics.port }}
     auth:
-        private_key: {{ .Values.caaas.configs.auth.private_key }}
-        encryption_salt: {{ .Values.caaas.configs.auth.encryption_salt }}
-        tokens_expire_time: {{ .Values.caaas.configs.auth.tokens_expire_time }}
+      private_key: {{ .Values.caaas.configs.auth.private_key }}
+      encryption_salt: {{ .Values.caaas.configs.auth.encryption_salt }}
+      tokens_expire_time: {{ .Values.caaas.configs.auth.tokens_expire_time }}
     logger:
-        level: {{ .Values.caaas.configs.logger.level }}
+      level: {{ .Values.caaas.configs.logger.level }}
     storage:
-    {{ if .Values.caaas.dbConfigsFromPostgresCharts }}
-        host: {{ include "postgresql.fullname" . }}
-        port: {{ .Values.postgresql.service.port }}
-        user: {{ .Values.postgresql.postgresqlUsername }}
-        pass: {{ .Values.postgresql.postgresqlPassword }}
-        database: {{ .Values.postgresql.postgresqlDatabase }}
-        ssl: {{ .Values.postgresql.service.ssl }}
-    {{ else }}
-        host: {{ .Values.caaas.configs.storage.host }}
-        port: {{ .Values.caaas.configs.storage.port }}
-        user: {{ .Values.caaas.configs.storage.user }}
-        pass: {{ .Values.caaas.configs.storage.pass }}
-        database: {{ .Values.caaas.configs.storage.database }}
+    {{- if .Values.caaas.dbConfigsFromPostgresCharts }}
+      host: {{ include "postgresql.fullname" . }}
+      port: {{ .Values.postgresql.service.port }}
+      user: {{ .Values.postgresql.postgresqlUsername }}
+      pass: {{ .Values.postgresql.postgresqlPassword }}
+      database: {{ .Values.postgresql.postgresqlDatabase }}
+    {{- else }}
+      host: {{ .Values.caaas.configs.storage.host }}
+      port: {{ .Values.caaas.configs.storage.port }}
+      user: {{ .Values.caaas.configs.storage.user }}
+      pass: {{ .Values.caaas.configs.storage.pass }}
+      database: {{ .Values.caaas.configs.storage.database }}
     {{ end }}
     

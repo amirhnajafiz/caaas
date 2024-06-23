@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: {{ include "caaas.fullname" . }}
   labels:
-    {{- toYaml .Values.caaas.labels | default "{}" | indent 4 }}
+    {{ toYaml .Values.caaas.labels | default "{}" }}
 spec:
   type: {{ .Values.caaas.service.type }}
   ports:
@@ -12,4 +12,4 @@ spec:
       protocol: TCP
       name: http
   selector:
-    {{- toYaml .Values.caaas.labels | default "{}" | indent 4 }}
+    {{ toYaml .Values.caaas.labels | default "{}" }}
