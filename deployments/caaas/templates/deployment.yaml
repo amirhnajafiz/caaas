@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-statefulset
+  name: {{ .Release.Name }}-deployment
   namespace: {{ .Release.Namespace }}
   labels:
     {{ toYaml .Values.caaas.labels | default "{}" }}
@@ -17,8 +17,20 @@ spec:
         caaas.application.type: api
         {{ toYaml .Values.caaas.labels | default "{}" }}
     spec:
+      initContainers:
+      - name: migrate-container
+        imagePullPolicy: {{ .Values.caaas.image.pullPolicy }}
+        image: {{ .Values.caaas.image.repository }}:{{ .Values.caaas.image.tag }}
+        env:
+        - name: CAAAS_MODE
+          value: "migrate"
+        volumeMounts:
+        - name: configmap-file  
+          mountPath: "/usr/share/caass/config.yaml"
+          subPath: "config.yaml"
+          readOnly: true
       containers:
-      - name: gw-container
+      - name: api-container
         imagePullPolicy: {{ .Values.caaas.image.pullPolicy }}
         image: {{ .Values.caaas.image.repository }}:{{ .Values.caaas.image.tag }}
         env:
