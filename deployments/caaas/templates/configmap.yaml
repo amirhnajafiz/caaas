@@ -4,7 +4,7 @@ metadata:
   name: {{ .Release.Name }}-configmap
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- include .Values.caaas.labels . | indent 4 }}
+    {{- toYaml .Values.caaas.labels | default "{}" | indent 4 }}
 data:
   config.yaml:
     http_server_port: {{ .Values.caaas.configs.http_server_port }}
@@ -21,9 +21,9 @@ data:
     {{ if .Values.caaas.dbConfigsFromPostgresCharts }}
         host: {{ include "postgresql.fullname" . }}
         port: {{ .Values.postgresql.service.port }}
-        user: {{ .Values.postgresql.auth.username }}
-        pass: {{ .Values.postgresql.auth.password }}
-        database: {{ .Values.postgresql.auth.database }}
+        user: {{ .Values.postgresql.postgresqlUsername }}
+        pass: {{ .Values.postgresql.postgresqlPassword }}
+        database: {{ .Values.postgresql.postgresqlDatabase }}
         ssl: {{ .Values.postgresql.service.ssl }}
     {{ else }}
         host: {{ .Values.caaas.configs.storage.host }}

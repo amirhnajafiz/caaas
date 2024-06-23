@@ -3,10 +3,12 @@
 # make sure to apply the following values in caaas config values.
 postgresql:
   enabled: true
-  auth:
-    username: "user"
-    password: "password"
-    database: "caaas-db"
+  # PostgreSQL User to create
+  postgresqlUsername: caaas-user
+  # PostgreSQL Password for the new user
+  postgresqlPassword: caaas-password
+  # PostgreSQL Database to create
+  postgresqlDatabase: caaas-db
 
 # set caaas configs.
 caaas:
