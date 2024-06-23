@@ -7,6 +7,7 @@ import (
 	"github.com/amirhnajafiz/caaas/internal/controller"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"go.uber.org/zap"
 )
 
@@ -30,6 +31,21 @@ func (h Handler) Execute() error {
 
 	// register normal endpoints
 	api := e.Group("/api")
+
+	// using logger middleware for api
+	api.Use(middleware.RequestLoggerWithConfig(middleware.RequestLoggerConfig{
+		LogURI:    true,
+		LogStatus: true,
+		LogValuesFunc: func(c echo.Context, v middleware.RequestLoggerValues) error {
+			h.Logger.Info("request",
+				zap.String("URI", v.URI),
+				zap.Int("status", v.Status),
+			)
+
+			return nil
+		},
+	}))
+
 	v1 := api.Group("/v1")
 	users := v1.Group("/users")
 	groups := v1.Group("/groups")

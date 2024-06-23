@@ -9,6 +9,7 @@ import (
 	"github.com/amirhnajafiz/caaas/pkg/jwt"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"go.uber.org/zap"
 )
 
@@ -34,6 +35,18 @@ func (h Handler) Execute() error {
 
 	// register metric needed enpoints
 	counts := e.Group("", h.requestsMiddleware)
+	counts.Use(middleware.RequestLoggerWithConfig(middleware.RequestLoggerConfig{
+		LogURI:    true,
+		LogStatus: true,
+		LogValuesFunc: func(c echo.Context, v middleware.RequestLoggerValues) error {
+			h.Logger.Info("request",
+				zap.String("URI", v.URI),
+				zap.Int("status", v.Status),
+			)
+
+			return nil
+		},
+	}))
 
 	// loging endpoint
 	counts.POST("/", h.login)
