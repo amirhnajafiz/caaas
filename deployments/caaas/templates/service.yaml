@@ -3,6 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "caaas.fullname" . }}-api
+  annotations: {}
   labels:
     {{ toYaml .Values.caaas.labels | default "{}" }}
 spec:
@@ -20,6 +21,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "caaas.fullname" . }}-gateway
+  annotations: {}
   labels:
     {{ toYaml .Values.caaas.labels | default "{}" }}
 spec:

@@ -6,7 +6,7 @@ metadata:
   labels:
     {{ toYaml .Values.caaas.labels | default "{}" }}
 data:
-  config.yaml:
+  config.yaml: |
     http_server_port: {{ .Values.caaas.configs.http_server_port }}
     metrics:
       enable: {{ .Values.caaas.configs.metrics.enable }}

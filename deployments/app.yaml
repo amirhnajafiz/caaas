@@ -1,0 +1,414 @@
+---
+# Source: caaas/charts/postgresql/templates/secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: caaas-postgresql
+  labels:
+    app.kubernetes.io/name: postgresql
+    helm.sh/chart: postgresql-10.16.2
+    app.kubernetes.io/instance: caaas
+    app.kubernetes.io/managed-by: Helm
+  namespace: realtime-production
+type: Opaque
+data:
+  postgresql-postgres-password: "bGZUNjZrVU52QQ=="
+  postgresql-password: "Y2FhYXMtcGFzc3dvcmQ="
+---
+# Source: caaas/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: caaas-configmap
+  namespace: realtime-production
+  labels:
+    app: caaas
+data:
+  config.yaml: |
+    http_server_port: 8080
+    metrics:
+      enable: true
+      port: 8081
+    auth:
+      private_key: private
+      encryption_salt: salt
+      tokens_expire_time: 30
+    logger:
+      level: error
+    storage:
+      host: caaas-postgresql
+      port: 5432
+      user: caaas-user
+      pass: caaas-password
+      database: caaas-db
+---
+# Source: caaas/charts/postgresql/templates/svc-headless.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: caaas-postgresql-headless
+  labels:
+    app.kubernetes.io/name: postgresql
+    helm.sh/chart: postgresql-10.16.2
+    app.kubernetes.io/instance: caaas
+    app.kubernetes.io/managed-by: Helm
+    # Use this annotation in addition to the actual publishNotReadyAddresses
+    # field below because the annotation will stop being respected soon but the
+    # field is broken in some versions of Kubernetes:
+    # https://github.com/kubernetes/kubernetes/issues/58662
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+  namespace: realtime-production
+spec:
+  type: ClusterIP
+  clusterIP: None
+  # We want all pods in the StatefulSet to have their addresses published for
+  # the sake of the other Postgresql pods even before they're ready, since they
+  # have to be able to talk to each other in order to become ready.
+  publishNotReadyAddresses: true
+  ports:
+    - name: tcp-postgresql
+      port: 5432
+      targetPort: tcp-postgresql
+  selector:
+    app.kubernetes.io/name: postgresql
+    app.kubernetes.io/instance: caaas
+---
+# Source: caaas/charts/postgresql/templates/svc.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: caaas-postgresql
+  labels:
+    app.kubernetes.io/name: postgresql
+    helm.sh/chart: postgresql-10.16.2
+    app.kubernetes.io/instance: caaas
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+  namespace: realtime-production
+spec:
+  type: ClusterIP
+  ports:
+    - name: tcp-postgresql
+      port: 5432
+      targetPort: tcp-postgresql
+  selector:
+    app.kubernetes.io/name: postgresql
+    app.kubernetes.io/instance: caaas
+    role: primary
+---
+# Source: caaas/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: caaas-api
+  annotations: {}
+  labels:
+    app: caaas
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+      name: http
+  selector:
+    caaas.application.type: api
+    app: caaas
+---
+# Source: caaas/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: caaas-gateway
+  annotations: {}
+  labels:
+    app: caaas
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+      name: http
+  selector:
+    caaas.application.type: gateway
+    app: caaas
+---
+# Source: caaas/templates/replicaset.yaml
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: caaas-replicaset
+  namespace: realtime-production
+  annotations: {}
+  labels:
+    app: caaas
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      caaas.application.type: gateway
+      app: caaas
+  template:
+    metadata:
+      labels:
+        caaas.application.type: gateway
+        app: caaas
+    spec:
+      containers:
+      - name: gw-container
+        imagePullPolicy: IfNotPresent
+        image: ghcr.io/amirhnajafiz/caaas:v0.1.0
+        env:
+        - name: CAAAS_MODE
+          value: "gateway"
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: http
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: http
+        resources:
+          limits:
+            cpu: 100m
+            memory: 128Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
+        volumeMounts:
+        - name: configmap-file  
+          mountPath: "/usr/share/caass/config.yaml"
+          subPath: "config.yaml"
+          readOnly: true
+    volumes:
+    - name: configmap-file  
+      configMap:
+        name: caaas-configmap
+    restartPolicy: Never
+---
+# Source: caaas/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: caaas-deployment
+  namespace: realtime-production
+  annotations: {}
+  labels:
+    app: caaas
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      caaas.application.type: api
+      app: caaas
+  template:
+    metadata:
+      labels:
+        caaas.application.type: api
+        app: caaas
+    spec:
+      initContainers:
+      - name: migrate-container
+        imagePullPolicy: IfNotPresent
+        image: ghcr.io/amirhnajafiz/caaas:v0.1.0
+        env:
+        - name: CAAAS_MODE
+          value: "migrate"
+        volumeMounts:
+        - name: configmap-file  
+          mountPath: "/usr/share/caass/config.yaml"
+          subPath: "config.yaml"
+          readOnly: true
+      containers:
+      - name: api-container
+        imagePullPolicy: IfNotPresent
+        image: ghcr.io/amirhnajafiz/caaas:v0.1.0
+        env:
+        - name: CAAAS_MODE
+          value: "api"
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: http
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: http
+        resources:
+          limits:
+            cpu: 100m
+            memory: 128Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
+        volumeMounts:
+        - name: configmap-file  
+          mountPath: "/usr/share/caass/config.yaml"
+          subPath: "config.yaml"
+          readOnly: true
+    volumes:
+    - name: configmap-file  
+      configMap:
+        name: caaas-configmap
+    restartPolicy: Never
+---
+# Source: caaas/charts/postgresql/templates/statefulset.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: caaas-postgresql
+  labels:
+    app.kubernetes.io/name: postgresql
+    helm.sh/chart: postgresql-10.16.2
+    app.kubernetes.io/instance: caaas
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: primary
+  annotations:
+  namespace: realtime-production
+spec:
+  serviceName: caaas-postgresql-headless
+  replicas: 1
+  updateStrategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: postgresql
+      app.kubernetes.io/instance: caaas
+      role: primary
+  template:
+    metadata:
+      name: caaas-postgresql
+      labels:
+        app.kubernetes.io/name: postgresql
+        helm.sh/chart: postgresql-10.16.2
+        app.kubernetes.io/instance: caaas
+        app.kubernetes.io/managed-by: Helm
+        role: primary
+        app.kubernetes.io/component: primary
+    spec:      
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: postgresql
+                    app.kubernetes.io/instance: caaas
+                    app.kubernetes.io/component: primary
+                namespaces:
+                  - "realtime-production"
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      securityContext:
+        fsGroup: 1001
+      automountServiceAccountToken: false
+      containers:
+        - name: caaas-postgresql
+          image: docker.io/bitnami/postgresql:11.14.0-debian-10-r28
+          imagePullPolicy: "IfNotPresent"
+          resources:
+            requests:
+              cpu: 250m
+              memory: 256Mi
+          securityContext:
+            runAsUser: 1001
+          env:
+            - name: BITNAMI_DEBUG
+              value: "false"
+            - name: POSTGRESQL_PORT_NUMBER
+              value: "5432"
+            - name: POSTGRESQL_VOLUME_DIR
+              value: "/bitnami/postgresql"
+            - name: PGDATA
+              value: "/bitnami/postgresql/data"
+            - name: POSTGRES_POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: caaas-postgresql
+                  key: postgresql-postgres-password
+            - name: POSTGRES_USER
+              value: "caaas-user"
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: caaas-postgresql
+                  key: postgresql-password
+            - name: POSTGRES_DB
+              value: "caaas-db"
+            - name: POSTGRESQL_ENABLE_LDAP
+              value: "no"
+            - name: POSTGRESQL_ENABLE_TLS
+              value: "no"
+            - name: POSTGRESQL_LOG_HOSTNAME
+              value: "false"
+            - name: POSTGRESQL_LOG_CONNECTIONS
+              value: "false"
+            - name: POSTGRESQL_LOG_DISCONNECTIONS
+              value: "false"
+            - name: POSTGRESQL_PGAUDIT_LOG_CATALOG
+              value: "off"
+            - name: POSTGRESQL_CLIENT_MIN_MESSAGES
+              value: "error"
+            - name: POSTGRESQL_SHARED_PRELOAD_LIBRARIES
+              value: "pgaudit"
+          ports:
+            - name: tcp-postgresql
+              containerPort: 5432
+          livenessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - exec pg_isready -U "caaas-user" -d "dbname=caaas-db" -h 127.0.0.1 -p 5432
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 6
+          readinessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - -e
+                - |
+                  exec pg_isready -U "caaas-user" -d "dbname=caaas-db" -h 127.0.0.1 -p 5432
+                  [ -f /opt/bitnami/postgresql/tmp/.initialized ] || [ -f /bitnami/postgresql/.initialized ]
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 6
+          volumeMounts:
+            - name: dshm
+              mountPath: /dev/shm
+            - name: data
+              mountPath: /bitnami/postgresql
+              subPath: 
+      volumes:
+        - name: dshm
+          emptyDir:
+            medium: Memory
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: "8Gi"

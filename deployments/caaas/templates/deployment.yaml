@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   name: {{ .Release.Name }}-deployment
   namespace: {{ .Release.Namespace }}
+  annotations: {}
   labels:
     {{ toYaml .Values.caaas.labels | default "{}" }}
 spec:

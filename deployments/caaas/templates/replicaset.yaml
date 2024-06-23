@@ -3,6 +3,7 @@ kind: ReplicaSet
 metadata:
   name: {{ .Release.Name }}-replicaset
   namespace: {{ .Release.Namespace }}
+  annotations: {}
   labels:
     {{ toYaml .Values.caaas.labels | default "{}" }}
 spec:
