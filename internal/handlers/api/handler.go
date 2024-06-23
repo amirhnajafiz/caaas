@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/amirhnajafiz/caaas/internal/controller"
+	v1 "github.com/amirhnajafiz/caaas/internal/handlers/api/v1"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -46,20 +47,11 @@ func (h Handler) Execute() error {
 		},
 	}))
 
-	v1 := api.Group("/v1")
-	users := v1.Group("/users")
-	groups := v1.Group("/groups")
-
-	// users methods
-	users.GET("/", h.getAllUsers)
-	users.POST("/", h.createUser)
-	users.PATCH("/", h.updateUser)
-	users.DELETE("/", h.removeUser)
-
-	// groups methods
-	groups.POST("/", h.addUserToGroup)
-	groups.PATCH("/", h.removeUserFromGroup)
-	groups.DELETE("/", h.removeGroup)
+	// create all v.hanlders
+	v1.Handler{
+		Logger: h.Logger.Named("v1"),
+		Ctl:    h.Ctl,
+	}.New(api.Group("v1"))
 
 	return e.Start(fmt.Sprintf(":%d", h.Port))
 }
