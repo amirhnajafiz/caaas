@@ -47,7 +47,7 @@ func (c *Controller) GetUser(username string) (model.User, error) {
 
 // UpdateUser updates the give user's password.
 func (c *Controller) UpdateUser(username, password string) error {
-	_, err := c.database.Model(&model.User{}).Set("password = ?", password).Set("updated_at = ?", time.Now()).Where("username = ?", username).Update()
+	_, err := c.database.Model((*model.User)(nil)).Set("password = ?", password).Set("updated_at = ?", time.Now()).Where("username = ?", username).Update()
 
 	return err
 }
@@ -59,11 +59,11 @@ func (c *Controller) DeleteUser(username string) error {
 		return err
 	}
 
-	if _, err := tx.Model(&model.User{}).Where("username = ?", username).Delete(); err != nil {
+	if _, err := tx.Model((*model.User)(nil)).Where("username = ?", username).Delete(); err != nil {
 		return tx.Rollback()
 	}
 
-	if _, err := tx.Model(&model.UserGroup{}).Where("username = ?", username).Delete(); err != nil {
+	if _, err := tx.Model((*model.UserGroup)(nil)).Where("username = ?", username).Delete(); err != nil {
 		return tx.Rollback()
 	}
 
