@@ -55,6 +55,7 @@ func (h Handler) Execute() error {
 	auth := counts.Group("", h.authMiddleware)
 	auth.GET("/", h.validate)
 	auth.GET("/groups", h.groups)
+	auth.GET("/roles", h.roles)
 
 	return e.Start(fmt.Sprintf(":%d", h.Port))
 }

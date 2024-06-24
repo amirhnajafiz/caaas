@@ -8,3 +8,8 @@ type GroupsResponse struct {
 	Username string   `json:"username"`
 	Groups   []string `json:"groups"`
 }
+
+type RolesResponse struct {
+	Username string   `json:"username"`
+	Roles    []string `json:"roles"`
+}

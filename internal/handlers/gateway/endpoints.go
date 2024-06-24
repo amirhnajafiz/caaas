@@ -82,3 +82,25 @@ func (h Handler) groups(c echo.Context) error {
 		Groups:   groups,
 	})
 }
+
+func (h Handler) roles(c echo.Context) error {
+	start := time.Now()
+	username := c.Get("username").(string)
+
+	// fetch user groups
+	roles, err := h.Ctl.GetUserRoles(username)
+	if err != nil {
+		h.Metrics.AddFailedCall(c.Path())
+
+		h.Logger.Error("failed to fetch roles", zap.String("username", username), zap.Error(err))
+
+		return echo.ErrNotFound
+	}
+
+	h.Metrics.ObserveLatency(c.Path(), float64(time.Since(start).Milliseconds()))
+
+	return c.JSON(http.StatusOK, RolesResponse{
+		Username: username,
+		Roles:    roles,
+	})
+}
