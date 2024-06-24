@@ -12,7 +12,7 @@ metadata:
   namespace: realtime-production
 type: Opaque
 data:
-  postgresql-postgres-password: "bGZUNjZrVU52QQ=="
+  postgresql-postgres-password: "Wm55T2RjUlBOdw=="
   postgresql-password: "Y2FhYXMtcGFzc3dvcmQ="
 ---
 # Source: caaas/templates/configmap.yaml
@@ -138,7 +138,7 @@ spec:
 apiVersion: apps/v1
 kind: ReplicaSet
 metadata:
-  name: caaas-replicaset
+  name: caaas-gateway
   namespace: realtime-production
   annotations: {}
   labels:
@@ -192,11 +192,11 @@ spec:
         name: caaas-configmap
     restartPolicy: Never
 ---
-# Source: caaas/templates/deployment.yaml
+# Source: caaas/templates/replicaset.yaml
 apiVersion: apps/v1
-kind: Deployment
+kind: ReplicaSet
 metadata:
-  name: caaas-deployment
+  name: caaas-api
   namespace: realtime-production
   annotations: {}
   labels:
