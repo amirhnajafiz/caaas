@@ -9,8 +9,6 @@ postgresql:
   postgresqlPassword: caaas-password
   # PostgreSQL Database to create
   postgresqlDatabase: caaas-db
-  svc:
-    annotations: {}
 
 # set caaas configs.
 caaas:
