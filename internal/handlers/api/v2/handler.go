@@ -16,7 +16,13 @@ type Handler struct {
 
 func (h Handler) New(v2 *echo.Group) {
 	users := v2.Group("/users")
+	roles := v2.Group("/roles")
 
 	// users methods
 	users.GET("/", h.getUser)
+
+	// roles methods
+	roles.POST("/", h.addRoleToUser)
+	roles.PATCH("/", h.removeRoleFromUser)
+	roles.DELETE("/", h.removeRole)
 }
