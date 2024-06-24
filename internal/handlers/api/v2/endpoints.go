@@ -80,7 +80,7 @@ func (h Handler) removeRoleFromUser(c echo.Context) error {
 func (h Handler) removeRole(c echo.Context) error {
 	role := c.QueryParam("role")
 
-	// remove a group
+	// remove a role
 	if err := h.Ctl.RemoveRole(role); err != nil {
 		h.Logger.Error("failed to remove a role", zap.String("role", role), zap.Error(err))
 
