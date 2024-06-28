@@ -32,3 +32,5 @@ Gateways are very fast http services that are designed to handle the following m
 - Validate
 - Groups
 - Roles
+
+You can read more about its usages in [DOCS.md](./docs/README.md).
